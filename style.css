@@ -1,0 +1,202 @@
+:root {
+  --paper-off: #fbfcfe;
+  --ink: #1b3a6b;
+  --green: #28a745;
+  --red: #dc3545;
+  --amber: #ffc107;
+  --font-main: "Times New Roman", Times, serif;
+  --font-mono: "Courier New", Courier, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--paper-off);
+  /* Giả lập giấy kẻ ô ly xanh nhạt */
+  background-image:
+    linear-gradient(rgba(27, 58, 107, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27, 58, 107, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+  font-family: var(--font-main);
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.mono-font {
+  font-family: var(--font-mono);
+  font-weight: bold;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Typography & Cards */
+.card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(27, 58, 107, 0.1);
+}
+
+.login-card,
+.result-card {
+  margin-top: 50px;
+  text-align: center;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: var(--font-main);
+  font-size: 16px;
+  color: var(--ink);
+}
+
+.btn-primary {
+  background-color: var(--ink);
+  color: #fff;
+  border: none;
+  padding: 12px 30px;
+  font-size: 18px;
+  font-family: var(--font-main);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* Sticky Timerbar */
+.sticky-timerbar {
+  position: sticky;
+  top: 0;
+  background-color: var(--ink);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 30px;
+  font-size: 18px;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+}
+
+/* Hiệu ứng nhấp nháy cảnh báo < 5 phút */
+@keyframes pulse {
+  0% {
+    background-color: var(--ink);
+  }
+  50% {
+    background-color: var(--red);
+  }
+  100% {
+    background-color: var(--ink);
+  }
+}
+.timer-warning {
+  animation: pulse 1s infinite;
+}
+
+/* Định dạng câu hỏi */
+.question-title {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.options-list {
+  list-style: none;
+}
+
+.option-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: background 0.2s;
+}
+
+.option-item:hover {
+  background: rgba(27, 58, 107, 0.05);
+}
+
+.option-item label {
+  display: inline-block;
+  cursor: pointer;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+
+.tf-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(27, 58, 107, 0.2);
+}
+
+.tf-controls label {
+  margin-left: 10px;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+/* Auto-grading UI */
+.correct-ans {
+  background-color: rgba(40, 167, 69, 0.15) !important;
+  border: 1px solid var(--green) !important;
+  color: var(--green);
+}
+.wrong-ans {
+  background-color: rgba(220, 53, 69, 0.15) !important;
+  border: 1px solid var(--red) !important;
+  color: var(--red);
+}
+
+.explanation {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-left: 4px solid var(--ink);
+  font-style: italic;
+}
+
+.submit-container {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.score-display {
+  font-size: 2.5rem;
+  color: var(--green);
+  margin: 15px 0;
+}
