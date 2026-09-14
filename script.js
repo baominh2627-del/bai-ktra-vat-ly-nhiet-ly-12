@@ -1,5 +1,5 @@
 import { examData } from "./data.js";
-import { db, collection, addDoc, serverTimestamp } from "./firebase-config.js";
+import { db, ref, push, set, serverTimestamp } from "./firebase-config.js";
 
 const loginScreen = document.getElementById("login-screen");
 const examScreen = document.getElementById("exam-screen");
@@ -7,6 +7,7 @@ const resultScreen = document.getElementById("result-screen");
 const questionsContainer = document.getElementById("questions-container");
 const questionBoard = document.getElementById("question-board");
 const submitBtn = document.getElementById("submit-btn");
+const MA_DE = "A05";
 
 // Biến trạng thái
 let timeRemaining = 3000;
@@ -388,6 +389,9 @@ function submitExam() {
   if (timerPill) timerPill.classList.remove("timer-danger");
 
   let totalScore = 0;
+  let diemPhan1 = 0;
+  let diemPhan2 = 0;
+  let diemPhan3 = 0;
 
   examData.forEach((q) => {
     document.getElementById(`exp-${q.id}`).classList.remove("hidden");
@@ -399,6 +403,7 @@ function submitExam() {
         .classList.add("correct-ans");
       if (selected === q.correctAnswer) {
         totalScore += 0.25;
+        diemPhan1 += 0.25;
       } else if (selected !== undefined) {
         document
           .getElementById(`lbl-${q.id}-${selected}`)
@@ -416,9 +421,16 @@ function submitExam() {
           row.classList.add("wrong-ans");
         }
       });
-      if (cCount === 4) totalScore += 1.0;
-      else if (cCount === 3) totalScore += 0.5;
-      else if (cCount === 2) totalScore += 0.25;
+      if (cCount === 4) {
+        totalScore += 1.0;
+        diemPhan2 += 1.0;
+      } else if (cCount === 3) {
+        totalScore += 0.5;
+        diemPhan2 += 1.0;
+      } else if (cCount === 2) {
+        totalScore += 0.25;
+        diemPhan2 += 1.0;
+      }
     } else if (q.part === 3) {
       const input = document.querySelector(`input[name="ans-${q.id}"]`);
       if (
@@ -426,6 +438,7 @@ function submitExam() {
         q.correctAnswer.toLowerCase()
       ) {
         totalScore += 0.25;
+        diemPhan3 += 0.25;
         input.classList.add("correct-ans");
       } else {
         input.classList.add("wrong-ans");
@@ -443,7 +456,7 @@ function submitExam() {
   });
 
   // Lưu kết quả vào Firebase
-  saveExamResultToFirebase(totalScore);
+  saveExamResultToFirebase(diemPhan1, diemPhan2, diemPhan3);
 
   document.getElementById("final-score").innerText = totalScore.toFixed(2);
   document.getElementById("cheat-display").innerText = cheatCount;
@@ -455,15 +468,18 @@ function submitExam() {
   localStorage.removeItem("examDraft");
 }
 
-async function saveExamResultToFirebase(score) {
+async function saveExamResultToFirebase(diemPhan1, diemPhan2, diemPhan3) {
   try {
-    await addDoc(collection(db, "exam_results"), {
-      studentName: studentName,
-      studentClass: studentClass,
-      score: score,
-      totalQuestions: examData.length,
-      cheatCount: cheatCount,
-      timestamp: serverTimestamp(),
+    const ketQuaRef = ref(db, `ketQua/${MA_DE}`);
+    const newEntryRef = push(ketQuaRef);
+    await set(newEntryRef, {
+      hoTen: studentName,
+      lop: studentClass,
+      maDe: MA_DE,
+      diemPhan1: diemPhan1,
+      diemPhan2: diemPhan2,
+      diemPhan3: diemPhan3,
+      serverTimestamp: serverTimestamp(),
     });
   } catch (error) {
     console.error("Lỗi lưu kết quả:", error);
