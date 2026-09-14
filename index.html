@@ -65,7 +65,8 @@
 
           <div class="form-group">
             <label for="exam-time">Thời gian làm bài (phút)</label>
-            <input type="number" id="exam-time" value="45" required />
+            <input type="number" id="exam-time" value="50" />
+            <!-- required -->
           </div>
 
           <button type="submit" class="btn-primary" style="margin-top: 10px">
@@ -87,6 +88,15 @@
 
     <!-- Màn hình Làm bài thi -->
     <div id="exam-screen" class="hidden container">
+      <!-- Phần thêm -->
+      <div id="board-container" class="board-card">
+        <h3>Bảng Điều Hướng</h3>
+        <div class="legend">
+          <span class="box"></span> Chưa làm <span class="box done"></span> Đã
+          làm <span class="box flagged"></span> Đánh dấu
+        </div>
+        <div id="question-board" class="q-grid"></div>
+      </div>
       <!-- Khung Header Bài Thi (Giống ảnh) -->
       <div class="exam-header-block">
         <div class="exam-header-top">

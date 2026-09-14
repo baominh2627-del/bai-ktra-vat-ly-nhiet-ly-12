@@ -4,30 +4,46 @@ const loginScreen = document.getElementById("login-screen");
 const examScreen = document.getElementById("exam-screen");
 const resultScreen = document.getElementById("result-screen");
 const questionsContainer = document.getElementById("questions-container");
+const questionBoard = document.getElementById("question-board");
 const submitBtn = document.getElementById("submit-btn");
 
-let timeRemaining = 3000; // 50 phút
+// Biến trạng thái
+let timeRemaining = 3000; // Mặc định 50 phút = 3000 giây
 let timerInterval;
 let userAnswers = {};
+let flaggedQuestions = {};
 let isFinished = false;
 let cheatCount = 0;
 
-// Bắt đầu
+// 1. KIỂM TRA BẢN NHÁP & BẮT ĐẦU
 document.getElementById("login-form").addEventListener("submit", (e) => {
   e.preventDefault();
+
   document.getElementById("display-name").innerText =
     document.getElementById("student-name").value;
   document.getElementById("display-class").innerText =
     document.getElementById("student-class").value;
 
+  // Khôi phục dữ liệu bài làm dang dở nếu có
+  const draft = JSON.parse(localStorage.getItem("examDraft"));
+  if (draft && !draft.isFinished) {
+    timeRemaining = draft.timeRemaining;
+    userAnswers = draft.userAnswers || {};
+    flaggedQuestions = draft.flaggedQuestions || {};
+    cheatCount = draft.cheatCount || 0;
+  }
+
   loginScreen.classList.add("hidden");
   examScreen.classList.remove("hidden");
 
   renderExam();
+  restoreDOMState();
+  renderBoard();
   startTimer();
   setupAntiCheat();
 });
 
+// 2. RENDER CÂU HỎI & CHỨC NĂNG ĐÁNH DẤU
 function renderExam() {
   questionsContainer.innerHTML = "";
   let currentPart = 0;
@@ -51,8 +67,8 @@ function renderExam() {
     },
   };
 
-  examData.forEach((q) => {
-    // In Header của phần nếu chuyển phần mới
+  examData.forEach((q, index) => {
+    // In Header nếu chuyển phần mới
     if (q.part !== currentPart) {
       currentPart = q.part;
       const header = document.createElement("div");
@@ -62,15 +78,21 @@ function renderExam() {
         <div class="section-subtitle">${partTitles[currentPart].sub}</div>
       `;
       questionsContainer.appendChild(header);
-      qCounter = 1; // Reset số thứ tự câu trong mỗi phần
+      qCounter = 1;
     }
 
     const card = document.createElement("div");
     card.className = "question-card";
+    card.id = `q-card-${q.id}`;
 
     let contentHTML = `
       <div class="q-layout">
-        <div class="q-num">${qCounter}</div>
+        <div class="q-header" style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+          <div class="q-num">Câu ${qCounter}</div>
+          <button class="btn-flag ${flaggedQuestions[q.id] ? "active" : ""}" data-id="${q.id}">
+            ${flaggedQuestions[q.id] ? "Bỏ đánh dấu" : "Đánh dấu"}
+          </button>
+        </div>
         <div class="q-content">
           <div class="q-text">${q.question}</div>
     `;
@@ -87,8 +109,8 @@ function renderExam() {
       });
       contentHTML += `</div>`;
     } else if (q.part === 2) {
+      const letters = ["a", "b", "c", "d"];
       q.statements.forEach((stmt, idx) => {
-        const letters = ["a", "b", "c", "d"];
         contentHTML += `
           <div class="tf-row" id="row-${q.id}-${idx}">
             <div><strong>${letters[idx]})</strong> ${stmt.text}</div>
@@ -103,23 +125,36 @@ function renderExam() {
     }
 
     contentHTML += `<div class="explanation hidden" id="exp-${q.id}"><strong>Hướng dẫn giải:</strong> ${q.explanation}</div>`;
-    contentHTML += `</div></div>`; // Đóng q-content và q-layout
+    contentHTML += `</div></div>`;
     card.innerHTML = contentHTML;
     questionsContainer.appendChild(card);
     qCounter++;
   });
 
-  // Events lưu đáp án & Đếm số câu
+  // Sự kiện Đánh dấu (Flag)
+  document.querySelectorAll(".btn-flag").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const qid = e.target.getAttribute("data-id");
+      flaggedQuestions[qid] = !flaggedQuestions[qid];
+      e.target.classList.toggle("active");
+      e.target.innerText = flaggedQuestions[qid] ? "Bỏ đánh dấu" : "Đánh dấu";
+      updateBoard();
+      saveDraft();
+    });
+  });
+
+  // Sự kiện Lưu đáp án
   document.querySelectorAll("input").forEach((input) => {
     input.addEventListener("change", (e) => {
       const name = e.target.name;
 
-      // Đổi màu Label được chọn cho phần 1
       if (name.startsWith("ans-") && e.target.type === "radio") {
         const qid = name.replace("ans-", "");
-        document.querySelectorAll(`input[name="${name}"]`).forEach((r) => {
-          r.closest(".option-label").classList.remove("selected");
-        });
+        document
+          .querySelectorAll(`input[name="${name}"]`)
+          .forEach((r) =>
+            r.closest(".option-label").classList.remove("selected"),
+          );
         e.target.closest(".option-label").classList.add("selected");
         userAnswers[qid] = parseInt(e.target.value);
       } else if (name.startsWith("tf-")) {
@@ -130,41 +165,112 @@ function renderExam() {
         const qid = name.replace("ans-", "");
         userAnswers[qid] = e.target.value;
       }
-      updateProgress();
+      updateBoard();
+      saveDraft();
     });
   });
 
   if (window.MathJax) MathJax.typesetPromise();
 }
 
-function updateProgress() {
-  let answered = 0;
+// 3. TẠO & CẬP NHẬT BẢNG ĐIỀU HƯỚNG
+function renderBoard() {
+  if (!questionBoard) return;
+  questionBoard.innerHTML = "";
+  examData.forEach((q, index) => {
+    const box = document.createElement("div");
+    box.className = "q-box";
+    box.id = `box-${q.id}`;
+    box.innerText = index + 1;
+    box.addEventListener("click", () => {
+      document
+        .getElementById(`q-card-${q.id}`)
+        .scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+    questionBoard.appendChild(box);
+  });
+  updateBoard();
+}
+
+function updateBoard() {
+  let answeredCount = 0;
   examData.forEach((q) => {
-    if (q.part === 1 && userAnswers[q.id] !== undefined) answered++;
+    let answered = false;
+    if (q.part === 1 && userAnswers[q.id] !== undefined) answered = true;
     if (
       q.part === 2 &&
       userAnswers[q.id] &&
       Object.keys(userAnswers[q.id]).length === 4
     )
-      answered++;
+      answered = true;
     if (q.part === 3 && userAnswers[q.id] && userAnswers[q.id].trim() !== "")
-      answered++;
+      answered = true;
+
+    if (answered) answeredCount++;
+
+    if (questionBoard) {
+      const box = document.getElementById(`box-${q.id}`);
+      box.className = "q-box"; // Reset class
+      if (flaggedQuestions[q.id]) box.classList.add("flagged");
+      else if (answered) box.classList.add("done");
+    }
   });
-  document.getElementById("answered-count").innerText = `${answered}/28`;
+
+  const countEl = document.getElementById("answered-count");
+  if (countEl) countEl.innerText = `${answeredCount}/${examData.length}`;
 }
 
+// 4. LƯU & KHÔI PHỤC TIẾN ĐỘ
+function saveDraft() {
+  localStorage.setItem(
+    "examDraft",
+    JSON.stringify({
+      timeRemaining,
+      userAnswers,
+      flaggedQuestions,
+      cheatCount,
+      isFinished,
+    }),
+  );
+}
+
+function restoreDOMState() {
+  document.querySelectorAll("input").forEach((input) => {
+    const name = input.name;
+    const qid = name.split("-")[1];
+
+    if (input.type === "radio" && name.startsWith("ans-")) {
+      if (userAnswers[qid] == input.value) {
+        input.checked = true;
+        input.closest(".option-label").classList.add("selected");
+      }
+    } else if (input.type === "radio" && name.startsWith("tf-")) {
+      const idx = name.split("-")[2];
+      if (userAnswers[qid] && userAnswers[qid][idx] === input.value)
+        input.checked = true;
+    } else if (input.type === "text") {
+      input.value = userAnswers[qid] || "";
+    }
+  });
+}
+
+// 5. ĐỒNG HỒ & HẾT GIỜ TỰ NỘP
 function startTimer() {
   timerInterval = setInterval(() => {
     timeRemaining--;
+    saveDraft();
+
     const m = Math.floor(timeRemaining / 60)
       .toString()
       .padStart(2, "0");
     const s = (timeRemaining % 60).toString().padStart(2, "0");
     document.getElementById("countdown").innerText = `${m}:${s}`;
 
-    if (timeRemaining <= 30) {
+    if (timeRemaining === 30) {
+      alert("Cảnh báo: Chỉ còn 30 giây!");
       document.querySelector(".timer-pill").classList.add("timer-danger");
     }
+
     if (timeRemaining <= 0) {
       clearInterval(timerInterval);
       submitExam();
@@ -178,6 +284,7 @@ function setupAntiCheat() {
   });
 }
 
+// 6. NỘP BÀI VÀ CHẤM ĐIỂM
 submitBtn.addEventListener("click", () => {
   if (confirm("Bạn có chắc muốn nộp bài?")) submitExam();
 });
@@ -185,9 +292,15 @@ submitBtn.addEventListener("click", () => {
 function submitExam() {
   isFinished = true;
   clearInterval(timerInterval);
-  document.querySelectorAll("input").forEach((el) => (el.disabled = true));
+  localStorage.removeItem("examDraft");
+
+  document
+    .querySelectorAll("input, .btn-flag")
+    .forEach((el) => (el.disabled = true));
   submitBtn.style.display = "none";
-  document.querySelector(".exam-info-bar").style.position = "static";
+
+  const timerPill = document.querySelector(".timer-pill");
+  if (timerPill) timerPill.classList.remove("timer-danger");
 
   let totalScore = 0;
 
