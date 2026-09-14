@@ -566,3 +566,19 @@ body {
     justify-content: space-around;
   }
 }
+.score-pill {
+  background-color: #16a34a;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.score-pill .green-dot {
+  color: #fff;
+}

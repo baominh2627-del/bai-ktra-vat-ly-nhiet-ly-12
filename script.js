@@ -17,6 +17,7 @@ let isFinished = false;
 let cheatCount = 0;
 let studentName = "";
 let studentClass = "";
+let lastScore = 0;
 
 // KHÔI PHỤC BẢN NHÁP NGAY KHI TẢI TRANG
 window.addEventListener("DOMContentLoaded", () => {
@@ -430,6 +431,15 @@ function submitExam() {
         input.classList.add("wrong-ans");
       }
     }
+    lastScore = totalScore;
+
+    const timerPill = document.querySelector(".timer-pill");
+    const scorePill = document.getElementById("score-pill");
+    if (timerPill) timerPill.classList.add("hidden");
+    if (scorePill) {
+      scorePill.classList.remove("hidden");
+      document.getElementById("review-score").innerText = totalScore.toFixed(2);
+    }
   });
 
   // Lưu kết quả vào Firebase
@@ -463,4 +473,5 @@ async function saveExamResultToFirebase(score) {
 document.getElementById("review-btn").addEventListener("click", () => {
   resultScreen.classList.add("hidden");
   examScreen.classList.remove("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
 });
