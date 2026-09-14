@@ -4,99 +4,97 @@
   --green: #28a745;
   --red: #dc3545;
   --amber: #ffc107;
+  --blue: #007bff;
   --font-main: "Times New Roman", Times, serif;
   --font-mono: "Courier New", Courier, monospace;
 }
-
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
-
 body {
   background-color: var(--paper-off);
-  /* Giả lập giấy kẻ ô ly xanh nhạt */
-  background-image:
-    linear-gradient(rgba(27, 58, 107, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(27, 58, 107, 0.08) 1px, transparent 1px);
-  background-size: 20px 20px;
   font-family: var(--font-main);
   color: var(--ink);
   line-height: 1.6;
 }
-
 .mono-font {
   font-family: var(--font-mono);
   font-weight: bold;
 }
-
 .hidden {
   display: none !important;
 }
-
 .container {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
 
-/* Typography & Cards */
+/* Bố cục bài thi chia 2 cột */
+.exam-layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+  gap: 20px;
+}
+.main-content {
+  flex: 1;
+}
+.sidebar {
+  width: 300px;
+  position: sticky;
+  top: 70px;
+  align-self: flex-start;
+}
+
+/* Cards & Forms */
 .card {
-  background: #ffffff;
+  background: #fff;
   border-radius: 8px;
   padding: 25px;
   margin-bottom: 25px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(27, 58, 107, 0.1);
 }
-
 .login-card,
 .result-card {
   margin-top: 50px;
   text-align: center;
 }
-
-/* Forms */
 .form-group {
   margin-bottom: 20px;
   text-align: left;
 }
-
 label {
   display: block;
   margin-bottom: 8px;
   font-weight: bold;
 }
-
 input[type="text"],
 input[type="number"] {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-family: var(--font-main);
   font-size: 16px;
-  color: var(--ink);
 }
-
 .btn-primary {
   background-color: var(--ink);
   color: #fff;
   border: none;
   padding: 12px 30px;
   font-size: 18px;
-  font-family: var(--font-main);
   border-radius: 4px;
   cursor: pointer;
-  transition: opacity 0.2s;
 }
-
 .btn-primary:hover {
   opacity: 0.9;
 }
 
-/* Sticky Timerbar */
+/* Header Timer */
 .sticky-timerbar {
   position: sticky;
   top: 0;
@@ -108,70 +106,133 @@ input[type="number"] {
   font-size: 18px;
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s;
 }
 
-/* Hiệu ứng nhấp nháy cảnh báo < 5 phút */
-@keyframes pulse {
+/* Cảnh báo 30s cuối */
+@keyframes flash-danger {
   0% {
-    background-color: var(--ink);
-  }
-  50% {
     background-color: var(--red);
   }
+  50% {
+    background-color: #fff;
+    color: var(--red);
+  }
   100% {
-    background-color: var(--ink);
+    background-color: var(--red);
   }
 }
-.timer-warning {
-  animation: pulse 1s infinite;
+.timer-danger {
+  animation: flash-danger 0.5s infinite;
 }
 
-/* Định dạng câu hỏi */
+/* Câu hỏi & Chức năng Flag */
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
 .question-title {
   font-weight: bold;
   font-size: 18px;
-  margin-bottom: 15px;
+}
+.btn-flag {
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+.btn-flag.active {
+  background: var(--amber);
+  color: #000;
+  border-color: #d39e00;
 }
 
 .options-list {
   list-style: none;
 }
-
 .option-item {
   margin-bottom: 10px;
   padding: 10px;
   border-radius: 4px;
-  border: 1px solid transparent;
-  transition: background 0.2s;
 }
-
 .option-item:hover {
   background: rgba(27, 58, 107, 0.05);
 }
-
-.option-item label {
-  display: inline-block;
-  cursor: pointer;
-  font-weight: normal;
-  margin-bottom: 0;
-}
-
 .tf-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   padding: 8px 0;
-  border-bottom: 1px dashed rgba(27, 58, 107, 0.2);
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
 }
 
-.tf-controls label {
-  margin-left: 10px;
-  font-weight: normal;
+/* Bảng Trạng Thái Câu Hỏi */
+.board-card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.board-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0 15px;
+  font-size: 14px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.box {
+  width: 15px;
+  height: 15px;
+  border: 1px solid #ccc;
+  display: inline-block;
+}
+.box-none {
+  background: #fff;
+}
+.box-done {
+  background: var(--blue);
+  border-color: var(--blue);
+}
+.box-flag {
+  background: var(--amber);
+  border-color: var(--amber);
+}
+
+.question-board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+.q-box {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   cursor: pointer;
+  font-weight: bold;
+}
+.q-box.done {
+  background-color: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+.q-box.flagged {
+  background-color: var(--amber);
+  color: #000;
+  border-color: var(--amber);
 }
 
-/* Auto-grading UI */
+/* Chấm điểm */
 .correct-ans {
   background-color: rgba(40, 167, 69, 0.15) !important;
   border: 1px solid var(--green) !important;
@@ -182,7 +243,6 @@ input[type="number"] {
   border: 1px solid var(--red) !important;
   color: var(--red);
 }
-
 .explanation {
   margin-top: 15px;
   padding: 10px;
@@ -190,13 +250,11 @@ input[type="number"] {
   border-left: 4px solid var(--ink);
   font-style: italic;
 }
-
-.submit-container {
+.image-placeholder {
+  background: #e9ecef;
+  border: 2px dashed #6c757d;
+  padding: 20px;
   text-align: center;
-  margin-bottom: 50px;
-}
-.score-display {
-  font-size: 2.5rem;
-  color: var(--green);
-  margin: 15px 0;
+  margin: 10px 0;
+  color: #495057;
 }

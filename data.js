@@ -1,83 +1,93 @@
-// Type 1: Trắc nghiệm 1 đáp án (Radio)
-// Type 2: Đúng/Sai 4 mệnh đề
-// Type 3: Trả lời ngắn (Text)
-
 export const examData = [
   {
     id: "q1",
     type: 1,
     question:
-      "Câu 7: Một động cơ nhiệt nhận từ nguồn nóng nhiệt lượng $Q_1$ và thải ra nguồn lạnh nhiệt lượng $Q_2$. Hiệu suất của động cơ được tính bởi công thức",
+      "Một động cơ nhiệt nhận từ nguồn nóng nhiệt lượng $Q_1$ và thải ra nguồn lạnh nhiệt lượng $Q_2$. Hiệu suất của đồng cơ được tính bởi công thức (Câu 7 - Mã A05-2k9)",
     options: [
       "A. $H = \\frac{Q_1}{Q_1+Q_2} . 100\\%$",
       "B. $H = \\frac{Q_2}{Q_1} . 100\\%$",
       "C. $H = \\frac{Q_1-Q_2}{Q_1} . 100\\%$",
-      "D. $H = \\frac{Q_1-Q_2}{Q_2} . 100\\%$",
+      "D. $H = \\frac{Q_1}{Q_2} . 100\\%$",
     ],
-    correctAnswer: 2, // Index 2 tương ứng với C
+    correctAnswer: 2,
     explanation:
-      "Hiệu suất động cơ nhiệt: $H = \\frac{A}{Q_1} = \\frac{Q_1 - Q_2}{Q_1} \\times 100\\%$.",
+      "Dựa theo công thức tính hiệu suất động cơ nhiệt: H = A/Q1 = (Q1-Q2)/Q1 * 100%. Đáp án C.",
   },
   {
     id: "q2",
     type: 1,
     question:
-      "Câu 14 (Trích ảnh): Khi một chất lỏng đang sôi ở áp suất chuẩn, nếu ta tiếp tục cung cấp thêm nhiệt lượng thì:",
+      "Trường hợp nội năng của vật bị biến đổi không phải do truyền nhiệt là: (Câu 14 - Mã A05-2k9)",
     options: [
-      "A. Nhiệt độ của chất lỏng tiếp tục tăng lên.",
-      "B. Nhiệt độ của chất lỏng không đổi.",
-      "C. Nhiệt độ của chất lỏng giảm xuống do sự bay hơi mang theo nhiệt.",
-      "D. Các phân tử chất lỏng sẽ chuyển động chậm lại.",
+      "A. Gió mùa đông bắc tràn về làm cho không khí lạnh đi.",
+      "B. Cho cơm nóng vào bát thi bát cũng thấy nóng.",
+      "C. Chậu nước để ngoài nắng một lúc nóng lên.",
+      "D. Khi trời lạnh, ta xoa hai bàn tay vào nhau cho ấm lên.",
     ],
-    correctAnswer: 1, // Index 1 tương ứng với B
+    correctAnswer: 3,
     explanation:
-      "Trong quá trình sôi, nhiệt lượng cung cấp chỉ dùng để chuyển thể từ lỏng sang khí nên nhiệt độ hệ được giữ nguyên không đổi.",
+      "Xoa hai bàn tay vào nhau là hình thức thực hiện công, không phải truyền nhiệt. Đáp án D.",
   },
   {
     id: "q3",
-    type: 1,
+    type: 2,
     question:
-      "Câu 16 (Trích ảnh): Bình nhiệt lượng kế có lớp không khí giữa hai thành bình. Tác dụng chính của lớp không khí là:",
-    options: [
-      "A. làm nhiệt độ của chất lỏng trong bình luôn tăng.",
-      "B. hạn chế sự truyền nhiệt bằng dẫn nhiệt qua thành bình.",
-      "C. làm nội năng của chất lỏng không đổi trong mọi điều kiện.",
-      "D. ngăn hoàn toàn sự truyền năng lượng bằng bức xạ.",
+      "Một nhóm học sinh dự định sử dụng bình nhiệt lượng kế để xác định nhiệt nóng chảy riêng của nước đá theo công thức $\\lambda=\\frac{P\\Delta t}{\\Delta m}$. (Phần II - Câu 3 - Mã A05-2k9) <br><br> <div class='image-placeholder'>[Hình vẽ Bình Nhiệt Lượng Kế Phần II Câu 3 - Bạn tự cắt ảnh từ đề A05-2k9.pdf và chèn thẻ &lt;img&gt; vào đây]</div> Nhận định tính Đúng/Sai của các mệnh đề sau:",
+    statements: [
+      {
+        text: "a) Khoảng thời gian cấp điện $\\Delta t$ càng lớn thì nhiệt lượng do dây sợi đốt tỏa ra càng lớn.",
+        correct: true,
+      },
+      {
+        text: "b) Nhiệt lượng tổng cộng mà nước đá nhận vào trong thời gian cấp điện $\\Delta t$ là $P\\Delta t$.",
+        correct: false,
+      },
+      {
+        text: "c) Nhiệt nóng chảy riêng của nước đá tính được trong hai giai đoạn khác nhau do chưa tính đến phần nhiệt lượng mà nước đá nhận từ môi trường bên ngoài.",
+        correct: true,
+      },
+      {
+        text: "d) Kết quả thí nghiệm đã chứng minh được giả thuyết của nhóm học sinh.",
+        correct: false,
+      },
     ],
-    correctAnswer: 1, // Index 1 tương ứng với B
     explanation:
-      "Không khí dẫn nhiệt kém, do đó lớp không khí giúp hạn chế sự hao phí nhiệt qua hiện tượng dẫn nhiệt truyền ra môi trường bên ngoài.",
+      "Mệnh đề (b) sai vì nước đá còn nhận nhiệt từ môi trường. Mệnh đề (d) sai vì kết quả 2 giai đoạn khác nhau chứng tỏ có sự ảnh hưởng của môi trường.",
   },
   {
     id: "q4",
     type: 2,
     question:
-      "Nguyên lý 1 Nhiệt động lực học: Xét biểu thức $\\Delta U = A + Q$. Nhận định tính Đúng/Sai của các mệnh đề sau:",
+      "Một nhóm học sinh dự định làm thí nghiệm để xác định nhiệt nóng chảy riêng của nước đá bằng bộ dụng cụ gồm: phễu chứa nước đá (1); dây điện trở (2); cốc (3); và cân điện tử (4) như hình bên. (Phần II - Câu 4 - Mã A05-2k9) <br><br> <div class='image-placeholder'>[Hình vẽ Bộ thí nghiệm Phần II Câu 4 - Bạn tự cắt ảnh từ đề A05-2k9.pdf và chèn thẻ &lt;img&gt; vào đây]</div> Nhận định Đúng/Sai:",
     statements: [
       {
-        text: "a) $\\Delta U$ là độ biến thiên nội năng của vật.",
-        correct: true,
-      },
-      {
-        text: "b) $Q > 0$ nghĩa là hệ truyền nhiệt cho môi trường.",
+        text: "a) Ở giai đoạn 1, nước đá nóng chảy do nhận nhiệt từ dây sợi đốt.",
         correct: false,
       },
       {
-        text: "c) $A > 0$ nghĩa là hệ nhận công từ môi trường.",
+        text: "b) Ở giai đoạn 2, nhiệt lượng mà nước đá nhận vào lớn hơn $Pt_2$.",
         correct: true,
       },
-      { text: "d) Đối với hệ cô lập, $\\Delta U = 0$.", correct: true },
+      {
+        text: "c) Nhiệt nóng chảy riêng của nước đá đo được (gián tiếp) là $\\frac{P t_1 t_2}{m_2 t_1 - m_1 t_2}$",
+        correct: true,
+      },
+      {
+        text: "d) Nếu $t_1 = t_2 = t$ thì nhiệt lượng mà nước đá nhận từ môi trường trong mỗi giai đoạn là $\\frac{Pm_2 t}{m_2-m_1}$",
+        correct: false,
+      },
     ],
     explanation:
-      "Q > 0 là hệ nhận nhiệt lượng (Mệnh đề b sai). Hệ cô lập không trao đổi nhiệt và công nên $\\Delta U = 0$.",
+      "(a) Sai vì giai đoạn 1 chưa cấp điện. (b) Đúng vì ngoài dây điện trở còn nhận nhiệt môi trường. (c) Đúng theo thiết lập phương trình bù trừ nhiệt.",
   },
   {
     id: "q5",
     type: 3,
     question:
-      "Một hệ nhiệt động nhận nhiệt lượng $150\\text{ J}$ và thực hiện công $40\\text{ J}$ lên môi trường. Tính độ biến thiên nội năng của hệ (J).",
-    correctAnswer: "110",
+      "Ba cốc chứa nước có nhiệt độ lần lượt là $10^{\\circ}C$; $30^{\\circ}C$; $45^{\\circ}C$. (Phần III - Câu 6 - Mã A05-2k9) <br><br> <div class='image-placeholder'>[Hình vẽ 3 Cốc Nước Phần III Câu 6 - Bạn tự cắt ảnh từ đề A05-2k9.pdf và chèn thẻ &lt;img&gt; vào đây]</div> Nếu rót một nửa lượng nước trong cốc 1 và một nửa lượng nước trong cốc 2 vào cốc 3 thì nhiệt độ cân bằng là bao nhiêu độ C? Bỏ qua nhiệt dung của cốc.",
+    correctAnswer: "24",
     explanation:
-      "Hệ nhận nhiệt ($Q = +150\\text{ J}$), thực hiện công ($A = -40\\text{ J}$). Theo nguyên lý 1 NĐLH: $\\Delta U = A + Q = -40 + 150 = 110\\text{ J}$.",
+      "Sử dụng phương trình cân bằng nhiệt và khối lượng nước rút ra từ các dữ kiện nhiệt độ 15 độ C và 35 độ C ở câu hỏi. Kết quả là 24 độ C.",
   },
 ];
