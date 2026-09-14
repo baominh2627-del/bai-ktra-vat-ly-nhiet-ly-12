@@ -84,12 +84,12 @@ export const examData = [
     id: "p1_7",
     part: 1,
     question:
-      "Một động cơ nhiệt nhận từ nguồn nóng nhiệt lượng $Q_{1}$ và thải ra nguồn lạnh nhiệt lượng $Q_2$. Hiệu suất của đồng cơ được tính bởi công thức",
+      "Một động cơ nhiệt nhận từ nguồn nóng nhiệt lượng $Q_1$ và thải ra nguồn lạnh nhiệt lượng $Q_2$. Hiệu suất của động cơ được tính bởi công thức",
     options: [
-      "$H=\\frac{Q_{1}}{Q_{1}+Q_{2}}.100\\%$",
-      "$H=\\frac{Q_{2}}{Q_{1}}.100\\%$",
-      "$H=\\frac{Q_{1}-Q_{2}}{Q_{1}}.100\\%$",
-      "$H=\\frac{Q_{1}}{Q_{2}}.100\\%$",
+      "$H=\\frac{Q_1}{Q_1+Q_2}.100\\%$",
+      "$H=\\frac{Q_2}{Q_1}.100\\%$",
+      "$H=\\frac{Q_1-Q_2}{Q_1}.100\\%$",
+      "$H=\\frac{Q_1}{Q_2}.100\\%$",
     ],
     correctAnswer: 2,
     explanation:
@@ -99,7 +99,7 @@ export const examData = [
     id: "p1_8",
     part: 1,
     question:
-      "Một lượng không khí nóng được chứa trong một xilanh cách nhiệt... Nếu không khí nóng thực hiện một công có độ lớn là 4000 J, thì nội năng của nó biến thiên một lượng bằng",
+      "Một lượng không khí nóng được chứa trong một xilanh cách nhiệt đặt nằm ngang có pit-tông có thể dịch chuyển được. Không khí nóng dãn nở đẩy pit-tông dịch chuyển. Nếu không khí nóng thực hiện một công có độ lớn là 4000 J, thì nội năng của nó biến thiên một lượng bằng",
     options: ["-4000 J.", "4000 J.", "0 J.", "2000 J."],
     correctAnswer: 0,
     explanation:
@@ -111,7 +111,7 @@ export const examData = [
     question: "Nhiệt độ không tuyệt đối (0 K) là nhiệt độ",
     options: [
       "mà tại đó các phân tử có động năng chuyển động nhiệt bằng không.",
-      "tương ứng với 273, $15^{\\circ}C$ trong thang Celsius.",
+      "tương ứng với $273,15^{\\circ}C$ trong thang Celsius.",
       "mà thế năng tương tác giữa các phân tử là cực đại.",
       "mà tại đó các phân tử có động năng chuyển động nhiệt cực đại.",
     ],
@@ -126,7 +126,7 @@ export const examData = [
       "Không có cấu trúc tinh thể, có nhiệt độ nóng chảy xác định.",
       "Có cấu trúc tinh thể, có nhiệt độ nóng chảy xác định.",
       "Có cấu trúc tinh thể, không có nhiệt độ nóng chảy xác định.",
-      "Không cấu trúc mạng tinh thể, không nhiệt độ nóng chảy xác định.",
+      "Không có cấu trúc tinh thể, không có nhiệt độ nóng chảy xác định.",
     ],
     correctAnswer: 1,
     explanation: "Tính chất cơ bản của vật rắn tinh thể.",
@@ -136,9 +136,9 @@ export const examData = [
     part: 1,
     question: "Khi hai vật có nhiệt độ bằng nhau tiếp xúc nhau thì:",
     options: [
-      "không có sự truyền nhiệt năng giữa chúng",
-      "nhiệt năng được truyền từ vật có nhiệt độ thấp sang vật có nhiệt độ cao",
-      "nhiệt năng được truyền từ vật có nhiệt độ cao sang vật có nhiệt độ thấp",
+      "không có sự truyền nhiệt năng giữa chúng.",
+      "nhiệt năng được truyền từ vật có nhiệt độ thấp sang vật có nhiệt độ cao.",
+      "nhiệt năng được truyền từ vật có nhiệt độ cao sang vật có nhiệt độ thấp.",
       "trạng thái cân bằng nhiệt không xảy ra ở hai vật.",
     ],
     correctAnswer: 0,
@@ -181,8 +181,8 @@ export const examData = [
     question:
       "Trường hợp nội năng của vật bị biến đổi không phải do truyền nhiệt là:",
     options: [
-      "Gió mùa đông bắc tràn về làm cho không khí lạnh đi",
-      "Cho cơm nóng vào bát thi bát cũng thấy nóng.",
+      "Gió mùa đông bắc tràn về làm cho không khí lạnh đi.",
+      "Cho cơm nóng vào bát thì bát cũng thấy nóng.",
       "Chậu nước để ngoài nắng một lúc nóng lên.",
       "Khi trời lạnh, ta xoa hai bàn tay vào nhau cho ấm lên.",
     ],
@@ -220,7 +220,7 @@ export const examData = [
     id: "p1_17",
     part: 1,
     question:
-      "Quan sát thao tác kẹp nhiệt kế nách... bác sĩ yêu cầu phải giữ nhiệt kế ở nách ít nhất $3-5$ phút. Mục đích của việc làm này là",
+      "Quan sát thao tác kẹp nhiệt kế nách cho bệnh nhân sốt, bác sĩ yêu cầu phải giữ nhiệt kế ở nách ít nhất 3-5 phút trước khi đọc kết quả. Mục đích của việc làm này dưới góc độ vật lí là",
     options: [
       "chờ cho thuỷ ngân đông đặc lại.",
       "chờ cho nhiệt lượng tự phát ra từ nhiệt kế truyền hết sang bệnh nhân.",
@@ -234,7 +234,7 @@ export const examData = [
     id: "p1_18",
     part: 1,
     question:
-      "Người ta nhúng một khối sắt có khối lượng 1 kg vào trong 1 kg nước cùng ở nhiệt độ phòng rồi cung cấp cho chúng nhiệt lượng 100 J. Cho nhiệt dung riêng của sắt 440J/(kg.K), nước 4180J/(kg.K)",
+      "Người ta nhúng một khối sắt có khối lượng 1 kg vào trong 1 kg nước cùng ở nhiệt độ phòng rồi cung cấp cho hệ nhiệt lượng 100 J, để cho đến khi sắt và nước cân bằng nhiệt. Cho nhiệt dung riêng của sắt $440 J/(kg.K)$, nước $4180 J/(kg.K)$.",
     options: [
       "Chúng hấp thu cùng một nhiệt lượng.",
       "Sắt hấp thu nhiệt lượng nhiều hơn.",
@@ -251,7 +251,7 @@ export const examData = [
     id: "p2_1",
     part: 2,
     question:
-      "Cho hai vật A và B tiếp xúc với nhau, một lúc sau ta thấy nhiệt độ của vật A tăng lên, nhiệt độ vật B giảm xuống.",
+      "Cho hai vật A và B tiếp xúc với nhau, một lúc sau ta thấy nhiệt độ của vật A tăng lên, nhiệt độ vật B giảm xuống (bỏ qua sự trao đổi nhiệt với môi trường bên ngoài).",
     statements: [
       {
         text: "Nhiệt độ ban đầu của vật A cao hơn nhiệt độ ban đầu của vật B",
@@ -274,13 +274,13 @@ export const examData = [
     id: "p2_2",
     part: 2,
     question:
-      "Nhúng vật rắn A vào nước -> nước tăng nhiệt độ. Nhấc A ra, nhúng B vào -> nước giảm nhiệt độ về ban đầu.",
+      "Nhúng một vật rắn A có nhiệt độ $t_A$ vào một chậu nước ta thấy nhiệt độ của nước trong chậu tăng lên đến một giá trị $t$ dừng lại. Nhấc vật A ra và tiếp tục nhúng vật rắn B có nhiệt độ $t_B$ vào nước thì thấy nhiệt độ của nước trong chậu giảm xuống đến nhiệt độ ban đầu của chậu nước rồi dừng lại (bỏ qua trao đổi nhiệt).",
     statements: [
       { text: "Đã có sự truyền nhiệt từ nước sang vật A", correct: false },
       { text: "Nhiệt độ của vật A lớn hơn nhiệt độ của vật B", correct: true },
       {
         text: "Nhiệt lượng của vật A truyền cho nước bằng nhiệt lượng của nước truyền cho vật B",
-        correct: false,
+        correct: true,
       },
       {
         text: "Trong thí nghiệm trên nội năng vật A giảm, nội năng vật B tăng.",
@@ -293,8 +293,7 @@ export const examData = [
   {
     id: "p2_3",
     part: 2,
-    question:
-      "Thí nghiệm xác định nhiệt nóng chảy riêng của nước đá bằng nhiệt lượng kế theo công thức $\\lambda=\\frac{P\\Delta t}{\\Delta m}$. <div class='image-placeholder'>[Chèn Hình Bình Nhiệt Lượng Kế]</div>",
+    image: "img/anh-cau3-phanII.png",
     statements: [
       {
         text: "Khoảng thời gian cấp điện $\\Delta t$ càng lớn thì nhiệt lượng do dây sợi đốt tỏa ra càng lớn.",
@@ -319,8 +318,7 @@ export const examData = [
   {
     id: "p2_4",
     part: 2,
-    question:
-      "Xác định nhiệt nóng chảy riêng qua 2 giai đoạn (không đun và có đun). <div class='image-placeholder'>[Chèn Hình Bộ Dụng Cụ Thí Nghiệm]</div>",
+    image: "img/anh-cau4-phanII.png",
     statements: [
       {
         text: "Ở giai đoạn 1, nước đá nóng chảy do nhận nhiệt từ dây sợi đốt.",
@@ -357,7 +355,7 @@ export const examData = [
     id: "p3_2",
     part: 3,
     question:
-      "Bình chứa 1,5 kg nước ở $20^{\\circ}C$. Thả cục đồng 0,5 kg ở $300^{\\circ}C$. Biết $c_{n}=4200$, $c_d=380$. Nhiệt độ cuối cùng bằng bao nhiêu $^\\circ C$ (làm tròn 1 chữ số thập phân)?",
+      "Một bình cách nhiệt chứa 1,5 kg nước ở $20^{\\circ}C$. Thả vào bình một cục đồng 0,5 kg đang ở $300^{\\circ}C$. $C_{nuoc} = 4200 J/kgK$, $C_{dong} = 380 J/kgK$. Nhiệt độ cuối cùng của hệ thống là bao nhiêu $^\\circ C$ (làm tròn đến chữ số hàng phần mười)?",
     correctAnswer: "28.2",
     explanation:
       "Phương trình cân bằng nhiệt: $1.5 \\times 4200 \\times (t-20) = 0.5 \\times 380 \\times (300-t)$. Giải ra $t \\approx 28.2$.",
@@ -366,7 +364,7 @@ export const examData = [
     id: "p3_3",
     part: 3,
     question:
-      "Đun sôi 1,5 lít nước từ $20^{\\circ}C$ trong 19 phút. $H=90\\%$. Công suất ấm điện xấp xỉ bao nhiêu W?",
+      "Một ấm điện đun sôi được 1,5 lít nước từ $20^{\\circ}C$ trong 19 phút. Hiệu suất ấm 90%. Khối lượng riêng nước $1000 kg/m^3$, $C = 4200 J/kgK$. Công suất của ấm điện xấp xỉ bao nhiêu W (làm tròn đến hàng đơn vị)?",
     correctAnswer: "491",
     explanation:
       "Nhiệt lượng cần: $Q = 1.5 \\times 4200 \\times 80 = 504000 J$. Nhiệt do ấm tỏa: $Q_{tp} = Q / 0.9 = 560000 J$. $P = 560000 / 1140s = 491 W$.",
@@ -375,16 +373,15 @@ export const examData = [
     id: "p3_4",
     part: 3,
     question:
-      "Cho m(g) nước đá ở $-20^{\\circ}C$ vào 50 g nước ở $40^{\\circ}C$. Khi cân bằng 20 g đá chưa tan. Biết $c_{đá}=2.1$, $\\lambda=336$, $c_n=4.2$. Giá trị m bằng bao nhiêu?",
-    correctAnswer: "42",
+      "Cho $m$ (g) nước đá ở $-20^{\\circ}C$ vào 50 g nước ở $40^{\\circ}C$. Khi cân bằng nhiệt thì 20 g nước đá vẫn chưa tan. Biết $C_{da} = 2,1 J/(g.K)$, $\\lambda = 336 J/g$, $C_{nuoc} = 4,2 J/(g.K)$. Giá trị của m bằng bao nhiêu gam?",
+    correctAnswer: "40",
     explanation:
       "Nhiệt lượng tỏa: $Q_{toa} = 50 \\times 4.2 \\times 40 = 8400J$. Nhiệt lượng thu: $Q_{thu} = m \\times 2.1 \\times 20 + (m-20) \\times 336$. Giải pt $Q_{thu}=Q_{toa} \\Rightarrow m=42g$.",
   },
   {
     id: "p3_5",
     part: 3,
-    question:
-      "Bình A ($80^{\\circ}C$), Bình B ($20^{\\circ}C$). Đổ một nửa nước ở bình B sang A. Cân bằng đổ lại A sang B cho lượng nước như cũ. Nhiệt độ cân bằng bình B bằng bao nhiêu $^\\circ C$?",
+    image: "img/anh-cau5-phan3.png",
     correctAnswer: "40",
     explanation:
       "Khối lượng $m$. Lần 1 (A có $m$ ở $80$, nhận $m/2$ ở $20$): $t_1 = (m\\times80 + 0.5m\\times20)/1.5m = 60^{\\circ}C$. Lần 2 (B có $0.5m$ ở $20$, nhận $0.5m$ ở $60$): $t_2 = (0.5m\\times20 + 0.5m\\times60)/m = 40^{\\circ}C$.",
@@ -392,9 +389,8 @@ export const examData = [
   {
     id: "p3_6",
     part: 3,
-    question:
-      "Ba cốc chứa nước ở $10^{\\circ}C$, $30^{\\circ}C$, $45^{\\circ}C$. <div class='image-placeholder'>[Chèn Hình 3 Cốc Nước]</div> Nếu rót nửa lượng nước cốc 1 và nửa cốc 2 vào cốc 3, nhiệt độ cân bằng là bao nhiêu?",
-    correctAnswer: "24",
+    image: "img/anh-cau6-phan3.png",
+    correctAnswer: "22.5",
     explanation:
       "Từ giả thiết rút ra tỉ lệ khối lượng: $m_1 = m_2/3$, $m_3 = m_2/2$. Pha cốc 1,2,3 theo tỉ lệ khối lượng thu được $t_{cb} = 24^{\\circ}C$.",
   },
