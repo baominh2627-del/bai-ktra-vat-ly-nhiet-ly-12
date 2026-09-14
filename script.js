@@ -355,15 +355,17 @@ async function saveToFirebase(eventType, description) {
   try {
     const draft = JSON.parse(localStorage.getItem("examDraft"));
     if (draft) {
-      await addDoc(collection(db, "exam_logs"), {
-        studentName: draft.studentName,
-        studentClass: draft.studentClass,
+      const logRef = ref(db, `examLogs/${MA_DE}`);
+      const newLogRef = push(logRef);
+      await set(newLogRef, {
+        hoTen: draft.studentName,
+        lop: draft.studentClass,
         eventType: eventType,
         description: description,
         timeRemaining: draft.timeRemaining,
         answeredCount: Object.keys(draft.userAnswers).length,
         cheatCount: draft.cheatCount,
-        timestamp: serverTimestamp(),
+        serverTimestamp: serverTimestamp(),
       });
     }
   } catch (error) {
@@ -426,10 +428,10 @@ function submitExam() {
         diemPhan2 += 1.0;
       } else if (cCount === 3) {
         totalScore += 0.5;
-        diemPhan2 += 1.0;
+        diemPhan2 += 0.5;
       } else if (cCount === 2) {
         totalScore += 0.25;
-        diemPhan2 += 1.0;
+        diemPhan2 += 0.25;
       }
     } else if (q.part === 3) {
       const input = document.querySelector(`input[name="ans-${q.id}"]`);
@@ -444,16 +446,16 @@ function submitExam() {
         input.classList.add("wrong-ans");
       }
     }
-    lastScore = totalScore;
-
-    const timerPill = document.querySelector(".timer-pill");
-    const scorePill = document.getElementById("score-pill");
-    if (timerPill) timerPill.classList.add("hidden");
-    if (scorePill) {
-      scorePill.classList.remove("hidden");
-      document.getElementById("review-score").innerText = totalScore.toFixed(2);
-    }
   });
+  lastScore = totalScore;
+
+  let timerPillEl = document.querySelector(".timer-pill");
+  const scorePill = document.getElementById("score-pill");
+  if (timerPillEl) timerPillEl.classList.add("hidden");
+  if (scorePill) {
+    scorePill.classList.remove("hidden");
+    document.getElementById("review-score").innerText = totalScore.toFixed(2);
+  }
 
   // Lưu kết quả vào Firebase
   saveExamResultToFirebase(
