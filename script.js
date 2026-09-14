@@ -456,7 +456,13 @@ function submitExam() {
   });
 
   // Lưu kết quả vào Firebase
-  saveExamResultToFirebase(diemPhan1, diemPhan2, diemPhan3);
+  saveExamResultToFirebase(
+    diemPhan1,
+    diemPhan2,
+    diemPhan3,
+    totalScore,
+    cheatCount,
+  );
 
   document.getElementById("final-score").innerText = totalScore.toFixed(2);
   document.getElementById("cheat-display").innerText = cheatCount;
@@ -468,7 +474,13 @@ function submitExam() {
   localStorage.removeItem("examDraft");
 }
 
-async function saveExamResultToFirebase(diemPhan1, diemPhan2, diemPhan3) {
+async function saveExamResultToFirebase(
+  diemPhan1,
+  diemPhan2,
+  diemPhan3,
+  tongDiem,
+  soLanThoat,
+) {
   try {
     const ketQuaRef = ref(db, `ketQua/${MA_DE}`);
     const newEntryRef = push(ketQuaRef);
@@ -479,6 +491,9 @@ async function saveExamResultToFirebase(diemPhan1, diemPhan2, diemPhan3) {
       diemPhan1: diemPhan1,
       diemPhan2: diemPhan2,
       diemPhan3: diemPhan3,
+      tongDiem: tongDiem,
+      soLanThoat: soLanThoat,
+      thoiGianNop: new Date().toISOString(),
       serverTimestamp: serverTimestamp(),
     });
   } catch (error) {
