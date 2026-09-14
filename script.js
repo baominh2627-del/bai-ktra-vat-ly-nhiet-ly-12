@@ -3,334 +3,239 @@ import { examData } from "./data.js";
 const loginScreen = document.getElementById("login-screen");
 const examScreen = document.getElementById("exam-screen");
 const resultScreen = document.getElementById("result-screen");
-const timerBar = document.getElementById("timer-bar");
-const countdownEl = document.getElementById("countdown");
 const questionsContainer = document.getElementById("questions-container");
-const questionBoard = document.getElementById("question-board");
 const submitBtn = document.getElementById("submit-btn");
 
-let studentData = {};
+let timeRemaining = 3000; // 50 phút
 let timerInterval;
-let timeRemaining = 0;
+let userAnswers = {};
+let isFinished = false;
 let cheatCount = 0;
-let isExamFinished = false;
 
-// Trạng thái bài làm
-let userAnswers = {}; // Lưu đáp án đã chọn
-let flaggedQuestions = {}; // Lưu các câu đã đánh dấu
-
-// 0. KIỂM TRA DỮ LIỆU ĐANG DỞ
-window.onload = () => {
-  const savedState = localStorage.getItem("physics_exam_draft");
-  if (savedState) {
-    document.getElementById("resume-notice").classList.remove("hidden");
-  }
-};
-
-// 1. INIT
+// Bắt đầu
 document.getElementById("login-form").addEventListener("submit", (e) => {
   e.preventDefault();
-  const savedState = JSON.parse(localStorage.getItem("physics_exam_draft"));
-
-  if (savedState && !savedState.isExamFinished) {
-    // Khôi phục dữ liệu
-    studentData = savedState.studentData;
-    timeRemaining = savedState.timeRemaining;
-    userAnswers = savedState.userAnswers || {};
-    flaggedQuestions = savedState.flaggedQuestions || {};
-    cheatCount = savedState.cheatCount || 0;
-  } else {
-    // Tạo mới
-    studentData = {
-      name: document.getElementById("student-name").value.trim(),
-      class: document.getElementById("student-class").value.trim(),
-      time: parseInt(document.getElementById("exam-time").value) * 60,
-    };
-    timeRemaining = studentData.time;
-    userAnswers = {};
-    flaggedQuestions = {};
-  }
-
-  document.getElementById("display-name").innerText = studentData.name;
-  document.getElementById("display-class").innerText = studentData.class;
+  document.getElementById("display-name").innerText =
+    document.getElementById("student-name").value;
+  document.getElementById("display-class").innerText =
+    document.getElementById("student-class").value;
 
   loginScreen.classList.add("hidden");
   examScreen.classList.remove("hidden");
 
-  renderQuestions();
-  renderBoard();
-  restoreInputs();
-  startTimer(timeRemaining);
+  renderExam();
+  startTimer();
   setupAntiCheat();
 });
 
-// 2. RENDER CÂU HỎI
-function renderQuestions() {
+function renderExam() {
   questionsContainer.innerHTML = "";
-  examData.forEach((q, index) => {
+  let currentPart = 0;
+  let qCounter = 1;
+
+  const partTitles = {
+    1: {
+      title: "Phần I — Trắc nghiệm khách quan",
+      score: "4.5 điểm",
+      sub: "Mỗi câu đúng được 0.25 điểm. Chọn một đáp án duy nhất.",
+    },
+    2: {
+      title: "Phần II — Trắc nghiệm đúng sai",
+      score: "4.0 điểm",
+      sub: "Trong mỗi ý a, b, c, d, chọn đúng hoặc sai.",
+    },
+    3: {
+      title: "Phần III — Trắc nghiệm trả lời ngắn",
+      score: "1.5 điểm",
+      sub: "Nhập đáp án (chỉ ghi số hoặc kết quả cuối cùng).",
+    },
+  };
+
+  examData.forEach((q) => {
+    // In Header của phần nếu chuyển phần mới
+    if (q.part !== currentPart) {
+      currentPart = q.part;
+      const header = document.createElement("div");
+      header.className = "section-header";
+      header.innerHTML = `
+        <div class="section-title">${partTitles[currentPart].title} <span class="badge">${partTitles[currentPart].score}</span></div>
+        <div class="section-subtitle">${partTitles[currentPart].sub}</div>
+      `;
+      questionsContainer.appendChild(header);
+      qCounter = 1; // Reset số thứ tự câu trong mỗi phần
+    }
+
     const card = document.createElement("div");
-    card.className = "card question-card";
-    card.id = `card-${q.id}`;
+    card.className = "question-card";
 
     let contentHTML = `
-      <div class="question-header">
-        <div class="question-title">Câu ${index + 1}: ${q.question}</div>
-        <button class="btn-flag ${flaggedQuestions[q.id] ? "active" : ""}" data-qid="${q.id}">
-          ${flaggedQuestions[q.id] ? "Bỏ đánh dấu" : "Đánh dấu"}
-        </button>
-      </div>`;
+      <div class="q-layout">
+        <div class="q-num">${qCounter}</div>
+        <div class="q-content">
+          <div class="q-text">${q.question}</div>
+    `;
 
-    if (q.type === 1) {
-      contentHTML += `<ul class="options-list">`;
-      q.options.forEach((opt, optIdx) => {
+    if (q.part === 1) {
+      const letters = ["A", "B", "C", "D"];
+      contentHTML += `<div class="options-list">`;
+      q.options.forEach((opt, idx) => {
         contentHTML += `
-          <li class="option-item" id="opt-${q.id}-${optIdx}">
-            <label><input type="radio" name="ans-${q.id}" value="${optIdx}"> ${opt}</label>
-          </li>`;
+          <label class="option-label" id="lbl-${q.id}-${idx}">
+            <input type="radio" name="ans-${q.id}" value="${idx}">
+            <span class="opt-letter">${letters[idx]}.</span> ${opt}
+          </label>`;
       });
-      contentHTML += `</ul>`;
-    } else if (q.type === 2) {
-      q.statements.forEach((stmt, stmtIdx) => {
+      contentHTML += `</div>`;
+    } else if (q.part === 2) {
+      q.statements.forEach((stmt, idx) => {
+        const letters = ["a", "b", "c", "d"];
         contentHTML += `
-          <div class="tf-row" id="row-${q.id}-${stmtIdx}">
-            <div class="tf-stmt">${stmt.text}</div>
+          <div class="tf-row" id="row-${q.id}-${idx}">
+            <div><strong>${letters[idx]})</strong> ${stmt.text}</div>
             <div class="tf-controls">
-              <label><input type="radio" name="tf-${q.id}-${stmtIdx}" value="true"> Đúng</label>
-              <label><input type="radio" name="tf-${q.id}-${stmtIdx}" value="false"> Sai</label>
+              <label><input type="radio" name="tf-${q.id}-${idx}" value="true"> Đúng</label>
+              <label><input type="radio" name="tf-${q.id}-${idx}" value="false"> Sai</label>
             </div>
           </div>`;
       });
-    } else if (q.type === 3) {
-      contentHTML += `<div class="form-group"><input type="text" id="ans-${q.id}" placeholder="Nhập đáp án..."></div>`;
+    } else if (q.part === 3) {
+      contentHTML += `<input type="text" class="short-ans-input" name="ans-${q.id}" placeholder="Nhập đáp án...">`;
     }
 
-    contentHTML += `<div class="explanation hidden" id="exp-${q.id}">${q.explanation}</div>`;
+    contentHTML += `<div class="explanation hidden" id="exp-${q.id}"><strong>Hướng dẫn giải:</strong> ${q.explanation}</div>`;
+    contentHTML += `</div></div>`; // Đóng q-content và q-layout
     card.innerHTML = contentHTML;
     questionsContainer.appendChild(card);
+    qCounter++;
   });
 
-  // Gắn sự kiện lưu đáp án
+  // Events lưu đáp án & Đếm số câu
   document.querySelectorAll("input").forEach((input) => {
     input.addEventListener("change", (e) => {
-      saveInputData(e.target);
-      updateBoardUI();
-      saveDraft();
-    });
-  });
+      const name = e.target.name;
 
-  // Gắn sự kiện đánh dấu (Flag)
-  document.querySelectorAll(".btn-flag").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const qid = e.target.getAttribute("data-qid");
-      flaggedQuestions[qid] = !flaggedQuestions[qid];
-      e.target.classList.toggle("active");
-      e.target.innerText = flaggedQuestions[qid] ? "Bỏ đánh dấu" : "Đánh dấu";
-      updateBoardUI();
-      saveDraft();
-    });
-  });
-
-  if (window.MathJax) MathJax.typesetPromise([questionsContainer]);
-}
-
-// 3. RENDER & UPDATE BẢNG ĐIỀU HƯỚNG
-function renderBoard() {
-  questionBoard.innerHTML = "";
-  examData.forEach((q, index) => {
-    const box = document.createElement("div");
-    box.className = "q-box";
-    box.id = `qbox-${q.id}`;
-    box.innerText = index + 1;
-    box.addEventListener("click", () => {
-      document
-        .getElementById(`card-${q.id}`)
-        .scrollIntoView({ behavior: "smooth", block: "center" });
-    });
-    questionBoard.appendChild(box);
-  });
-  updateBoardUI();
-}
-
-function updateBoardUI() {
-  examData.forEach((q) => {
-    const box = document.getElementById(`qbox-${q.id}`);
-    box.className = "q-box"; // reset
-    if (flaggedQuestions[q.id]) {
-      box.classList.add("flagged");
-    } else if (isAnswered(q)) {
-      box.classList.add("done");
-    }
-  });
-}
-
-function isAnswered(q) {
-  if (q.type === 1) return userAnswers[q.id] !== undefined;
-  if (q.type === 2)
-    return userAnswers[q.id] && Object.keys(userAnswers[q.id]).length === 4;
-  if (q.type === 3) return userAnswers[q.id] && userAnswers[q.id].trim() !== "";
-  return false;
-}
-
-// 4. XỬ LÝ LƯU & KHÔI PHỤC TIẾN ĐỘ
-function saveInputData(target) {
-  const name = target.name;
-  if (name && name.startsWith("ans-")) {
-    const qid = name.replace("ans-", "");
-    userAnswers[qid] = parseInt(target.value);
-  } else if (name && name.startsWith("tf-")) {
-    const parts = name.split("-");
-    const qid = parts[1];
-    const stmtIdx = parts[2];
-    if (!userAnswers[qid]) userAnswers[qid] = {};
-    userAnswers[qid][stmtIdx] = target.value;
-  } else if (target.id && target.id.startsWith("ans-")) {
-    const qid = target.id.replace("ans-", "");
-    userAnswers[qid] = target.value;
-  }
-}
-
-function restoreInputs() {
-  examData.forEach((q) => {
-    if (q.type === 1 && userAnswers[q.id] !== undefined) {
-      const radio = document.querySelector(
-        `input[name="ans-${q.id}"][value="${userAnswers[q.id]}"]`,
-      );
-      if (radio) radio.checked = true;
-    } else if (q.type === 2 && userAnswers[q.id]) {
-      for (let i = 0; i < 4; i++) {
-        if (userAnswers[q.id][i]) {
-          const radio = document.querySelector(
-            `input[name="tf-${q.id}-${i}"][value="${userAnswers[q.id][i]}"]`,
-          );
-          if (radio) radio.checked = true;
-        }
+      // Đổi màu Label được chọn cho phần 1
+      if (name.startsWith("ans-") && e.target.type === "radio") {
+        const qid = name.replace("ans-", "");
+        document.querySelectorAll(`input[name="${name}"]`).forEach((r) => {
+          r.closest(".option-label").classList.remove("selected");
+        });
+        e.target.closest(".option-label").classList.add("selected");
+        userAnswers[qid] = parseInt(e.target.value);
+      } else if (name.startsWith("tf-")) {
+        const [, qid, idx] = name.split("-");
+        if (!userAnswers[qid]) userAnswers[qid] = {};
+        userAnswers[qid][idx] = e.target.value;
+      } else if (e.target.type === "text") {
+        const qid = name.replace("ans-", "");
+        userAnswers[qid] = e.target.value;
       }
-    } else if (q.type === 3 && userAnswers[q.id]) {
-      document.getElementById(`ans-${q.id}`).value = userAnswers[q.id];
-    }
+      updateProgress();
+    });
   });
+
+  if (window.MathJax) MathJax.typesetPromise();
 }
 
-function saveDraft() {
-  const state = {
-    studentData,
-    timeRemaining,
-    userAnswers,
-    flaggedQuestions,
-    cheatCount,
-    isExamFinished,
-  };
-  localStorage.setItem("physics_exam_draft", JSON.stringify(state));
+function updateProgress() {
+  let answered = 0;
+  examData.forEach((q) => {
+    if (q.part === 1 && userAnswers[q.id] !== undefined) answered++;
+    if (
+      q.part === 2 &&
+      userAnswers[q.id] &&
+      Object.keys(userAnswers[q.id]).length === 4
+    )
+      answered++;
+    if (q.part === 3 && userAnswers[q.id] && userAnswers[q.id].trim() !== "")
+      answered++;
+  });
+  document.getElementById("answered-count").innerText = `${answered}/28`;
 }
 
-// 5. ĐỒNG HỒ & CẢNH BÁO
-function startTimer(seconds) {
-  timeRemaining = seconds;
-  updateTimerDisplay();
-
+function startTimer() {
   timerInterval = setInterval(() => {
     timeRemaining--;
-    updateTimerDisplay();
-    saveDraft(); // Auto-save mỗi giây
+    const m = Math.floor(timeRemaining / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = (timeRemaining % 60).toString().padStart(2, "0");
+    document.getElementById("countdown").innerText = `${m}:${s}`;
 
-    // Thông báo 30s cuối
-    if (timeRemaining === 30) {
-      alert("CẢNH BÁO: Bài thi chỉ còn 30 giây! Vui lòng kiểm tra lại đáp án.");
-      timerBar.classList.add("timer-danger");
+    if (timeRemaining <= 30) {
+      document.querySelector(".timer-pill").classList.add("timer-danger");
     }
-
     if (timeRemaining <= 0) {
       clearInterval(timerInterval);
-      finishExam();
+      submitExam();
     }
   }, 1000);
 }
 
-function updateTimerDisplay() {
-  const m = Math.floor(timeRemaining / 60)
-    .toString()
-    .padStart(2, "0");
-  const s = (timeRemaining % 60).toString().padStart(2, "0");
-  countdownEl.innerText = `${m}:${s}`;
-}
-
-// 6. ANTI-CHEAT
 function setupAntiCheat() {
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden && !isExamFinished) {
-      cheatCount++;
-      alert(
-        `Cảnh báo gian lận! Bạn vừa thoát khỏi màn hình bài thi. (Vi phạm lần ${cheatCount})`,
-      );
-      saveDraft();
-    }
+    if (document.hidden && !isFinished) cheatCount++;
   });
 }
 
-// 7. CHẤM & NỘP BÀI
 submitBtn.addEventListener("click", () => {
-  if (confirm("Bạn có chắc chắn muốn nộp bài?")) finishExam();
+  if (confirm("Bạn có chắc muốn nộp bài?")) submitExam();
 });
 
-function finishExam() {
-  if (isExamFinished) return;
-  isExamFinished = true;
+function submitExam() {
+  isFinished = true;
   clearInterval(timerInterval);
-  timerBar.classList.remove("timer-danger");
-
-  document
-    .querySelectorAll("input, .btn-flag")
-    .forEach((el) => (el.disabled = true));
+  document.querySelectorAll("input").forEach((el) => (el.disabled = true));
   submitBtn.style.display = "none";
-  localStorage.removeItem("physics_exam_draft"); // Nộp xong xóa nháp
+  document.querySelector(".exam-info-bar").style.position = "static";
 
-  let totalPoints = 0;
-  const maxScore = 10 / examData.length;
+  let totalScore = 0;
 
   examData.forEach((q) => {
-    let earned = 0;
     document.getElementById(`exp-${q.id}`).classList.remove("hidden");
 
-    if (q.type === 1) {
-      const selectedVal = userAnswers[q.id];
+    if (q.part === 1) {
+      const selected = userAnswers[q.id];
       document
-        .getElementById(`opt-${q.id}-${q.correctAnswer}`)
+        .getElementById(`lbl-${q.id}-${q.correctAnswer}`)
         .classList.add("correct-ans");
-      if (selectedVal === q.correctAnswer) earned = maxScore;
-      else if (selectedVal !== undefined && selectedVal !== q.correctAnswer) {
+      if (selected === q.correctAnswer) {
+        totalScore += 0.25;
+      } else if (selected !== undefined) {
         document
-          .getElementById(`opt-${q.id}-${selectedVal}`)
+          .getElementById(`lbl-${q.id}-${selected}`)
           .classList.add("wrong-ans");
       }
-    } else if (q.type === 2) {
-      let correctCount = 0;
+    } else if (q.part === 2) {
+      let cCount = 0;
       q.statements.forEach((stmt, idx) => {
         const row = document.getElementById(`row-${q.id}-${idx}`);
         const ans = userAnswers[q.id] ? userAnswers[q.id][idx] : null;
         if (ans === stmt.correct.toString()) {
-          correctCount++;
+          cCount++;
           row.classList.add("correct-ans");
-        } else {
+        } else if (ans !== null) {
           row.classList.add("wrong-ans");
         }
       });
-      if (correctCount === 4) earned = maxScore;
-      else if (correctCount === 3) earned = maxScore * 0.5;
-      else if (correctCount === 2) earned = maxScore * 0.25;
-    } else if (q.type === 3) {
-      const inputEl = document.getElementById(`ans-${q.id}`);
-      const val = (userAnswers[q.id] || "").trim().toLowerCase();
-      if (val === q.correctAnswer.toLowerCase()) {
-        earned = maxScore;
-        inputEl.classList.add("correct-ans");
+      if (cCount === 4) totalScore += 1.0;
+      else if (cCount === 3) totalScore += 0.5;
+      else if (cCount === 2) totalScore += 0.25;
+    } else if (q.part === 3) {
+      const input = document.querySelector(`input[name="ans-${q.id}"]`);
+      if (
+        (userAnswers[q.id] || "").trim().toLowerCase() ===
+        q.correctAnswer.toLowerCase()
+      ) {
+        totalScore += 0.25;
+        input.classList.add("correct-ans");
       } else {
-        inputEl.classList.add("wrong-ans");
+        input.classList.add("wrong-ans");
       }
     }
-    totalPoints += earned;
   });
 
-  document.getElementById("final-score").innerText = totalPoints.toFixed(2);
+  document.getElementById("final-score").innerText = totalScore.toFixed(2);
   document.getElementById("cheat-display").innerText = cheatCount;
 
   examScreen.classList.add("hidden");

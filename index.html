@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kiểm Tra Tiến Độ 50 Phút - Môn Vật Lý 12</title>
+    <title>Kiểm Tra Vật Lý 12 - Mã Đề A05</title>
     <link rel="stylesheet" href="style.css" />
     <!-- MathJax for rendering Physics Formulas -->
     <script>
@@ -24,106 +24,113 @@
     ></script>
   </head>
   <body>
-    <!-- Màn hình Đăng nhập -->
+    <!-- Màn hình Đăng nhập (Thông tin học sinh) -->
     <div id="login-screen" class="container">
-      <div class="card login-card">
-        <h1>Kiểm Tra Tiến Độ 50 Phút</h1>
-        <h2>Môn Vật Lý 12 - Mã đề A05-2k9</h2>
+      <!-- Khung Header Bài Thi -->
+      <div class="exam-header-block" style="margin-bottom: 20px">
+        <div
+          class="exam-header-top"
+          style="
+            border-radius: 8px;
+            border-bottom: 1px solid var(--border-color);
+          "
+        >
+          <div class="meta-text">KIỂM TRA 45 PHÚT · MÔN TOÁN 8</div>
+          <h1 class="exam-title">Đa thức · Tứ giác · Tam giác bằng nhau</h1>
+          <div class="meta-sub">
+            20 câu trắc nghiệm · 4 câu đúng/sai · 3 câu trả lời ngắn — thang
+            điểm 10
+          </div>
+          <hr class="dashed-line" />
+        </div>
+      </div>
+
+      <!-- Khung Nhập thông tin -->
+      <div class="card form-card">
         <form id="login-form">
           <div class="form-group">
             <label for="student-name">Họ và tên học sinh</label>
             <input
               type="text"
               id="student-name"
+              placeholder="Nguyễn Văn A"
               required
-              placeholder="Nhập họ và tên..."
             />
           </div>
+
           <div class="form-group">
             <label for="student-class">Lớp</label>
-            <input
-              type="text"
-              id="student-class"
-              required
-              placeholder="Ví dụ: 12A1"
-            />
+            <input type="text" id="student-class" placeholder="8A1" required />
           </div>
+
           <div class="form-group">
             <label for="exam-time">Thời gian làm bài (phút)</label>
-            <!-- Mặc định 50 phút -->
-            <input type="number" id="exam-time" required value="50" min="1" />
+            <input type="number" id="exam-time" value="45" required />
           </div>
-          <button type="submit" class="btn-primary">Bắt đầu làm bài</button>
-          <p
-            id="resume-notice"
-            class="hidden"
-            style="color: red; margin-top: 10px; font-weight: bold"
-          >
-            Đang có bài làm dang dở, hệ thống sẽ khôi phục!
+
+          <button type="submit" class="btn-primary" style="margin-top: 10px">
+            Bắt đầu làm bài
+          </button>
+
+          <p class="form-note">
+            Khi hết giờ, bài làm sẽ tự động được nộp. Kết quả và đáp án sẽ hiển
+            thị ngay sau khi nộp bài.
           </p>
         </form>
+      </div>
+
+      <!-- Footer trang -->
+      <div class="page-footer">
+        Đề Toán 8 · tự động chấm điểm theo đúng barem & lưu kết quả
       </div>
     </div>
 
     <!-- Màn hình Làm bài thi -->
-    <div id="exam-screen" class="hidden">
-      <div id="timer-bar" class="sticky-timerbar">
-        <div class="student-info">
-          Thí sinh: <span id="display-name"></span> | Lớp:
-          <span id="display-class"></span>
+    <div id="exam-screen" class="hidden container">
+      <!-- Khung Header Bài Thi (Giống ảnh) -->
+      <div class="exam-header-block">
+        <div class="exam-header-top">
+          <div class="meta-text">KIỂM TRA 50 PHÚT · MÔN VẬT LÝ 12</div>
+          <h1 class="exam-title">Đề Tham Khảo · Mã đề A05-2k9</h1>
+          <div class="meta-sub">
+            18 câu trắc nghiệm · 4 câu đúng/sai · 6 câu trả lời ngắn — thang
+            điểm 10
+          </div>
+          <hr class="dashed-line" />
         </div>
-        <div class="timer-info">
-          Thời gian còn lại: <span id="countdown" class="mono-font">00:00</span>
+        <div class="exam-info-bar sticky">
+          <div class="student-info">
+            Thí sinh: <strong id="display-name" style="color: white"></strong> ·
+            Lớp <strong id="display-class" style="color: white"></strong>
+          </div>
+          <div class="progress-info">
+            <span id="answered-count">0/28</span> câu đã làm
+          </div>
+          <div class="timer-pill">
+            <span class="green-dot">●</span> <span id="countdown">50:00</span>
+          </div>
         </div>
       </div>
 
-      <div class="exam-layout">
-        <!-- Cột chứa câu hỏi -->
-        <div class="main-content" id="questions-container">
-          <!-- Render câu hỏi bằng JavaScript -->
-        </div>
+      <!-- Vùng chứa câu hỏi -->
+      <div id="questions-container">
+        <!-- Render bằng JS -->
+      </div>
 
-        <!-- Cột chứa bảng điều hướng -->
-        <div class="sidebar">
-          <div class="board-card">
-            <h3>Bảng Câu Hỏi</h3>
-            <div class="board-legend">
-              <span class="legend-item"
-                ><span class="box box-none"></span> Chưa làm</span
-              >
-              <span class="legend-item"
-                ><span class="box box-done"></span> Đã làm</span
-              >
-              <span class="legend-item"
-                ><span class="box box-flag"></span> Đánh dấu</span
-              >
-            </div>
-            <div id="question-board" class="question-board">
-              <!-- Render các ô số câu hỏi -->
-            </div>
-            <button
-              id="submit-btn"
-              class="btn-primary"
-              style="width: 100%; margin-top: 20px"
-            >
-              Nộp bài
-            </button>
-          </div>
-        </div>
+      <div class="submit-container">
+        <button id="submit-btn" class="btn-primary">Nộp bài kiểm tra</button>
       </div>
     </div>
 
     <!-- Màn hình Kết quả -->
     <div id="result-screen" class="hidden container">
       <div class="card result-card">
-        <h2>Kết Quả Bài Thi</h2>
+        <h2 style="font-family: var(--font-serif)">Kết Quả Bài Thi</h2>
         <div class="score-display mono-font">
           Điểm: <span id="final-score"></span>/10
         </div>
-        <p>
-          Số lần cảnh báo gian lận (rời tab): <span id="cheat-display">0</span>
-        </p>
-        <button id="review-btn" class="btn-primary">Xem lại chi tiết</button>
+        <p>Số lần rời khỏi màn hình: <span id="cheat-display">0</span></p>
+        <button id="review-btn" class="btn-primary">Xem lại bài làm</button>
       </div>
     </div>
 

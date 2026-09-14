@@ -1,93 +1,213 @@
 export const examData = [
+  // --- PHẦN 1: TRẮC NGHIỆM (18 CÂU) ---
   {
-    id: "q1",
-    type: 1,
-    question:
-      "Một động cơ nhiệt nhận từ nguồn nóng nhiệt lượng $Q_1$ và thải ra nguồn lạnh nhiệt lượng $Q_2$. Hiệu suất của đồng cơ được tính bởi công thức (Câu 7 - Mã A05-2k9)",
-    options: [
-      "A. $H = \\frac{Q_1}{Q_1+Q_2} . 100\\%$",
-      "B. $H = \\frac{Q_2}{Q_1} . 100\\%$",
-      "C. $H = \\frac{Q_1-Q_2}{Q_1} . 100\\%$",
-      "D. $H = \\frac{Q_1}{Q_2} . 100\\%$",
-    ],
-    correctAnswer: 2,
-    explanation:
-      "Dựa theo công thức tính hiệu suất động cơ nhiệt: H = A/Q1 = (Q1-Q2)/Q1 * 100%. Đáp án C.",
+    id: "p1_1", part: 1,
+    question: "Chất nào sau đây không có cấu trúc tinh thể?",
+    options: ["Miếng nhựa thông", "Hạt đường", "Viên kim cương", "Khối thạch anh"],
+    correctAnswer: 0,
+    explanation: "Nhựa thông là chất vô định hình, không có cấu trúc tinh thể."
   },
   {
-    id: "q2",
-    type: 1,
-    question:
-      "Trường hợp nội năng của vật bị biến đổi không phải do truyền nhiệt là: (Câu 14 - Mã A05-2k9)",
-    options: [
-      "A. Gió mùa đông bắc tràn về làm cho không khí lạnh đi.",
-      "B. Cho cơm nóng vào bát thi bát cũng thấy nóng.",
-      "C. Chậu nước để ngoài nắng một lúc nóng lên.",
-      "D. Khi trời lạnh, ta xoa hai bàn tay vào nhau cho ấm lên.",
-    ],
+    id: "p1_2", part: 1,
+    question: "$J/kg$ là đơn vị của đại lượng nào dưới đây:",
+    options: ["Nội năng", "Nhiệt dung riêng", "Nhiệt lượng", "Nhiệt nóng chảy riêng"],
     correctAnswer: 3,
-    explanation:
-      "Xoa hai bàn tay vào nhau là hình thức thực hiện công, không phải truyền nhiệt. Đáp án D.",
+    explanation: "Nhiệt nóng chảy riêng $\\lambda$ có đơn vị là $J/kg$."
   },
   {
-    id: "q3",
-    type: 2,
-    question:
-      "Một nhóm học sinh dự định sử dụng bình nhiệt lượng kế để xác định nhiệt nóng chảy riêng của nước đá theo công thức $\\lambda=\\frac{P\\Delta t}{\\Delta m}$. (Phần II - Câu 3 - Mã A05-2k9) <br><br> <div class='image-placeholder'>[Hình vẽ Bình Nhiệt Lượng Kế Phần II Câu 3 - Bạn tự cắt ảnh từ đề A05-2k9.pdf và chèn thẻ &lt;img&gt; vào đây]</div> Nhận định tính Đúng/Sai của các mệnh đề sau:",
+    id: "p1_3", part: 1,
+    question: "Trong các hiện tượng sau, hiện tượng liên quan đến sự nóng chảy là",
+    options: ["thả cục nước đá vào cốc nước ấm.", "đốt ngọn đèn dầu.", "đun nóng một nồi nước.", "cho cốc nước vào tủ lạnh."],
+    correctAnswer: 0,
+    explanation: "Cục nước đá (rắn) chuyển sang thể lỏng là hiện tượng nóng chảy."
+  },
+  {
+    id: "p1_4", part: 1,
+    question: "Tình huống nào dưới đây làm biến đổi nội năng của vật do truyền nhiệt?",
+    options: ["Cọ xát vật vào mặt bàn.", "Đặt vật lạnh vào bồn nước ấm.", "Nén một lò xo.", "Nén khí trong xilanh."],
+    correctAnswer: 1,
+    explanation: "Sự chênh lệch nhiệt độ khiến nhiệt năng truyền từ bồn nước ấm sang vật lạnh."
+  },
+  {
+    id: "p1_5", part: 1,
+    question: "Khi làm nóng một vật, nhiệt độ của vật tăng thêm $25^{\\circ}C$. Độ tăng nhiệt độ của vật trong thang Kelvin là",
+    options: ["298 K", "25 K", "248 K", "-248 K"],
+    correctAnswer: 1,
+    explanation: "Độ chia thang Kelvin bằng thang Celsius nên $\\Delta T = \\Delta t = 25K$."
+  },
+  {
+    id: "p1_6", part: 1,
+    question: "Mặt trời mọc lên, dưới ánh nắng mặt trời làm cho các hạt sương tan dần. Hiện tượng này thể hiện quá trình chuyển từ thể",
+    options: ["rắn sang lỏng.", "hơi sang lỏng.", "lỏng sang rắn.", "lỏng sang hơi."],
+    correctAnswer: 3,
+    explanation: "Hạt sương (lỏng) bốc hơi thành hơi nước (khí) dưới ánh nắng."
+  },
+  {
+    id: "p1_7", part: 1,
+    question: "Một động cơ nhiệt nhận từ nguồn nóng nhiệt lượng $Q_{1}$ và thải ra nguồn lạnh nhiệt lượng $Q_2$. Hiệu suất của đồng cơ được tính bởi công thức",
+    options: ["$H=\\frac{Q_{1}}{Q_{1}+Q_{2}}.100\\%$", "$H=\\frac{Q_{2}}{Q_{1}}.100\\%$", "$H=\\frac{Q_{1}-Q_{2}}{Q_{1}}.100\\%$", "$H=\\frac{Q_{1}}{Q_{2}}.100\\%$"],
+    correctAnswer: 2,
+    explanation: "Công thức hiệu suất: $H = \\frac{A}{Q_1} = \\frac{Q_1 - Q_2}{Q_1} \\times 100\\%$."
+  },
+  {
+    id: "p1_8", part: 1,
+    question: "Một lượng không khí nóng được chứa trong một xilanh cách nhiệt... Nếu không khí nóng thực hiện một công có độ lớn là 4000 J, thì nội năng của nó biến thiên một lượng bằng",
+    options: ["-4000 J.", "4000 J.", "0 J.", "2000 J."],
+    correctAnswer: 0,
+    explanation: "Hệ cách nhiệt $Q=0$. Thực hiện công $A < 0 \\Rightarrow \\Delta U = A = -4000J$."
+  },
+  {
+    id: "p1_9", part: 1,
+    question: "Nhiệt độ không tuyệt đối (0 K) là nhiệt độ",
+    options: ["mà tại đó các phân tử có động năng chuyển động nhiệt bằng không.", "tương ứng với 273, $15^{\\circ}C$ trong thang Celsius.", "mà thế năng tương tác giữa các phân tử là cực đại.", "mà tại đó các phân tử có động năng chuyển động nhiệt cực đại."],
+    correctAnswer: 0,
+    explanation: "Ở 0 K, chuyển động nhiệt của phân tử ngừng lại."
+  },
+  {
+    id: "p1_10", part: 1,
+    question: "Vật rắn tinh thể có đặc tính nào sau đây?",
+    options: ["Không có cấu trúc tinh thể, có nhiệt độ nóng chảy xác định.", "Có cấu trúc tinh thể, có nhiệt độ nóng chảy xác định.", "Có cấu trúc tinh thể, không có nhiệt độ nóng chảy xác định.", "Không cấu trúc mạng tinh thể, không nhiệt độ nóng chảy xác định."],
+    correctAnswer: 1,
+    explanation: "Tính chất cơ bản của vật rắn tinh thể."
+  },
+  {
+    id: "p1_11", part: 1,
+    question: "Khi hai vật có nhiệt độ bằng nhau tiếp xúc nhau thì:",
+    options: ["không có sự truyền nhiệt năng giữa chúng", "nhiệt năng được truyền từ vật có nhiệt độ thấp sang vật có nhiệt độ cao", "nhiệt năng được truyền từ vật có nhiệt độ cao sang vật có nhiệt độ thấp", "trạng thái cân bằng nhiệt không xảy ra ở hai vật."],
+    correctAnswer: 0,
+    explanation: "Hai vật cùng nhiệt độ nghĩa là hệ đã ở trạng thái cân bằng nhiệt."
+  },
+  {
+    id: "p1_12", part: 1,
+    question: "Trong quá trình một chất rắn kết tinh nóng chảy thì chất rắn này",
+    options: ["có nhiệt độ không đổi và nội năng cũng không đổi.", "có nhiệt độ thay đổi và nội năng không đổi.", "có nhiệt độ không đổi và nội năng tăng lên do nhận nhiệt.", "có nhiệt độ thay đổi và nội năng tăng lên do nhận nhiệt."],
+    correctAnswer: 2,
+    explanation: "Đang nóng chảy thì $T$ không đổi, nhưng hệ vẫn nhận $Q > 0$ nên nội năng tăng."
+  },
+  {
+    id: "p1_13", part: 1,
+    question: "Phát biểu nào sau đây là đúng khi nói về cấu trúc vi mô của chất lỏng?",
+    options: ["Trong chất lỏng các phân tử rời xa nhau và lực tương tác phân tử rất yếu.", "Trong chất lỏng các phân tử chuyển động hỗn loạn về mọi phía chiếm không gian bình chứa.", "Trong chất lỏng các phân tử dao động quanh vị trí cân bằng có thể dịch chuyển.", "Trong chất lỏng các phân tử sắp xếp có trật tự và dao động quanh vị trí cân bằng xác định."],
+    correctAnswer: 2,
+    explanation: "Phân tử lỏng dao động quanh vị trí cân bằng tạm thời và có thể dịch chuyển."
+  },
+  {
+    id: "p1_14", part: 1,
+    question: "Trường hợp nội năng của vật bị biến đổi không phải do truyền nhiệt là:",
+    options: ["Gió mùa đông bắc tràn về làm cho không khí lạnh đi", "Cho cơm nóng vào bát thi bát cũng thấy nóng.", "Chậu nước để ngoài nắng một lúc nóng lên.", "Khi trời lạnh, ta xoa hai bàn tay vào nhau cho ấm lên."],
+    correctAnswer: 3,
+    explanation: "Xoa tay là thực hiện công."
+  },
+  {
+    id: "p1_15", part: 1,
+    question: "Phát biểu nào sau đây là sai?",
+    options: ["Khi khoảng cách giữa các phân tử tăng lên thì lực đẩy phân tử yếu đi và lực hút phân tử mạnh lên.", "Chuyển động của hạt phấn hoa trong chất lỏng được gọi là chuyển động Brown.", "Nội năng của một vật là tổng động năng và thế năng của các phân tử trong vật.", "Giữa các phân tử có lực hút và lực đẩy."],
+    correctAnswer: 0,
+    explanation: "Khi khoảng cách tăng thì cả lực hút và đẩy đều yếu đi."
+  },
+  {
+    id: "p1_16", part: 1,
+    question: "Trong quá trình nén một khối khí, nội năng của khối khí biến thiên một lượng $\\Delta U$. Nội năng này là",
+    options: ["lượng nhiệt khí nhận vào từ môi trường.", "tổng động năng và thế năng tương tác của các phân tử khí.", "lượng công mà khí đã thực hiện lên pít-tông.", "đại lượng chỉ phụ thuộc duy nhất vào áp suất của khối khí."],
+    correctAnswer: 1,
+    explanation: "Định nghĩa nội năng là tổng động năng và thế năng phân tử."
+  },
+  {
+    id: "p1_17", part: 1,
+    question: "Quan sát thao tác kẹp nhiệt kế nách... bác sĩ yêu cầu phải giữ nhiệt kế ở nách ít nhất $3-5$ phút. Mục đích của việc làm này là",
+    options: ["chờ cho thuỷ ngân đông đặc lại.", "chờ cho nhiệt lượng tự phát ra từ nhiệt kế truyền hết sang bệnh nhân.", "đảm bảo đủ thời gian cho quá trình trao đổi nhiệt đạt trạng thái cân bằng nhiệt.", "để cơ thể người bệnh hạ nhiệt xuống đúng $37^{\\circ}C$"],
+    correctAnswer: 2,
+    explanation: "Cần thời gian để nhiệt kế và cơ thể cân bằng nhiệt."
+  },
+  {
+    id: "p1_18", part: 1,
+    question: "Người ta nhúng một khối sắt có khối lượng 1 kg vào trong 1 kg nước cùng ở nhiệt độ phòng rồi cung cấp cho chúng nhiệt lượng 100 J. Cho nhiệt dung riêng của sắt 440J/(kg.K), nước 4180J/(kg.K)",
+    options: ["Chúng hấp thu cùng một nhiệt lượng.", "Sắt hấp thu nhiệt lượng nhiều hơn.", "Nước hấp thu nhiệt lượng nhiều hơn.", "Chưa đủ thông tin về hai vật nên chưa xác định được."],
+    correctAnswer: 2,
+    explanation: "Vì cùng $\\Delta t$ nhưng nhiệt dung riêng của nước lớn hơn rất nhiều."
+  },
+
+  // --- PHẦN 2: ĐÚNG SAI (4 CÂU) ---
+  {
+    id: "p2_1", part: 2,
+    question: "Cho hai vật A và B tiếp xúc với nhau, một lúc sau ta thấy nhiệt độ của vật A tăng lên, nhiệt độ vật B giảm xuống.",
     statements: [
-      {
-        text: "a) Khoảng thời gian cấp điện $\\Delta t$ càng lớn thì nhiệt lượng do dây sợi đốt tỏa ra càng lớn.",
-        correct: true,
-      },
-      {
-        text: "b) Nhiệt lượng tổng cộng mà nước đá nhận vào trong thời gian cấp điện $\\Delta t$ là $P\\Delta t$.",
-        correct: false,
-      },
-      {
-        text: "c) Nhiệt nóng chảy riêng của nước đá tính được trong hai giai đoạn khác nhau do chưa tính đến phần nhiệt lượng mà nước đá nhận từ môi trường bên ngoài.",
-        correct: true,
-      },
-      {
-        text: "d) Kết quả thí nghiệm đã chứng minh được giả thuyết của nhóm học sinh.",
-        correct: false,
-      },
+      { text: "Nhiệt độ ban đầu của vật A cao hơn nhiệt độ ban đầu của vật B", correct: false },
+      { text: "Nhiệt đã được truyền từ vật B sang vật A", correct: true },
+      { text: "Khi xảy ra cân bằng nhiệt, độ tăng nhiệt độ của vật A đúng bằng độ giảm nhiệt độ của vật B", correct: false },
+      { text: "Nhiệt độ cuối cùng vật B đạt được có thể bằng nhiệt độ ban đầu của vật A", correct: false }
     ],
-    explanation:
-      "Mệnh đề (b) sai vì nước đá còn nhận nhiệt từ môi trường. Mệnh đề (d) sai vì kết quả 2 giai đoạn khác nhau chứng tỏ có sự ảnh hưởng của môi trường.",
+    explanation: "Nhiệt truyền từ vật có nhiệt độ cao (B) sang vật có nhiệt độ thấp (A). Độ biến thiên nhiệt độ phụ thuộc vào khối lượng và nhiệt dung riêng."
   },
   {
-    id: "q4",
-    type: 2,
-    question:
-      "Một nhóm học sinh dự định làm thí nghiệm để xác định nhiệt nóng chảy riêng của nước đá bằng bộ dụng cụ gồm: phễu chứa nước đá (1); dây điện trở (2); cốc (3); và cân điện tử (4) như hình bên. (Phần II - Câu 4 - Mã A05-2k9) <br><br> <div class='image-placeholder'>[Hình vẽ Bộ thí nghiệm Phần II Câu 4 - Bạn tự cắt ảnh từ đề A05-2k9.pdf và chèn thẻ &lt;img&gt; vào đây]</div> Nhận định Đúng/Sai:",
+    id: "p2_2", part: 2,
+    question: "Nhúng vật rắn A vào nước -> nước tăng nhiệt độ. Nhấc A ra, nhúng B vào -> nước giảm nhiệt độ về ban đầu.",
     statements: [
-      {
-        text: "a) Ở giai đoạn 1, nước đá nóng chảy do nhận nhiệt từ dây sợi đốt.",
-        correct: false,
-      },
-      {
-        text: "b) Ở giai đoạn 2, nhiệt lượng mà nước đá nhận vào lớn hơn $Pt_2$.",
-        correct: true,
-      },
-      {
-        text: "c) Nhiệt nóng chảy riêng của nước đá đo được (gián tiếp) là $\\frac{P t_1 t_2}{m_2 t_1 - m_1 t_2}$",
-        correct: true,
-      },
-      {
-        text: "d) Nếu $t_1 = t_2 = t$ thì nhiệt lượng mà nước đá nhận từ môi trường trong mỗi giai đoạn là $\\frac{Pm_2 t}{m_2-m_1}$",
-        correct: false,
-      },
+      { text: "Đã có sự truyền nhiệt từ nước sang vật A", correct: false },
+      { text: "Nhiệt độ của vật A lớn hơn nhiệt độ của vật B", correct: true },
+      { text: "Nhiệt lượng của vật A truyền cho nước bằng nhiệt lượng của nước truyền cho vật B", correct: false },
+      { text: "Trong thí nghiệm trên nội năng vật A giảm, nội năng vật B tăng.", correct: true }
     ],
-    explanation:
-      "(a) Sai vì giai đoạn 1 chưa cấp điện. (b) Đúng vì ngoài dây điện trở còn nhận nhiệt môi trường. (c) Đúng theo thiết lập phương trình bù trừ nhiệt.",
+    explanation: "A tỏa nhiệt cho nước (A giảm nội năng), nước truyền nhiệt cho B (B tăng nội năng)."
   },
   {
-    id: "q5",
-    type: 3,
-    question:
-      "Ba cốc chứa nước có nhiệt độ lần lượt là $10^{\\circ}C$; $30^{\\circ}C$; $45^{\\circ}C$. (Phần III - Câu 6 - Mã A05-2k9) <br><br> <div class='image-placeholder'>[Hình vẽ 3 Cốc Nước Phần III Câu 6 - Bạn tự cắt ảnh từ đề A05-2k9.pdf và chèn thẻ &lt;img&gt; vào đây]</div> Nếu rót một nửa lượng nước trong cốc 1 và một nửa lượng nước trong cốc 2 vào cốc 3 thì nhiệt độ cân bằng là bao nhiêu độ C? Bỏ qua nhiệt dung của cốc.",
+    id: "p2_3", part: 2,
+    question: "Thí nghiệm xác định nhiệt nóng chảy riêng của nước đá bằng nhiệt lượng kế theo công thức $\\lambda=\\frac{P\\Delta t}{\\Delta m}$. <div class='image-placeholder'>[Chèn Hình Bình Nhiệt Lượng Kế]</div>",
+    statements: [
+      { text: "Khoảng thời gian cấp điện $\\Delta t$ càng lớn thì nhiệt lượng do dây sợi đốt tỏa ra càng lớn.", correct: true },
+      { text: "Nhiệt lượng tổng cộng mà nước đá nhận vào trong thời gian cấp điện $\\Delta t$ là $P\\Delta t$.", correct: false },
+      { text: "Nhiệt nóng chảy riêng của nước đá tính được trong hai giai đoạn khác nhau do chưa tính đến phần nhiệt lượng nhận từ môi trường.", correct: true },
+      { text: "Kết quả thí nghiệm đã chứng minh được giả thuyết của nhóm học sinh.", correct: false }
+    ],
+    explanation: "Phương án b sai vì nước đá còn nhận nhiệt từ môi trường bên ngoài."
+  },
+  {
+    id: "p2_4", part: 2,
+    question: "Xác định nhiệt nóng chảy riêng qua 2 giai đoạn (không đun và có đun). <div class='image-placeholder'>[Chèn Hình Bộ Dụng Cụ Thí Nghiệm]</div>",
+    statements: [
+      { text: "Ở giai đoạn 1, nước đá nóng chảy do nhận nhiệt từ dây sợi đốt.", correct: false },
+      { text: "Ở giai đoạn 2, nhiệt lượng mà nước đá nhận vào lớn hơn $Pt_2$.", correct: true },
+      { text: "Nhiệt nóng chảy riêng của nước đá đo được (gián tiếp) là $\\frac{Pt_1t_2}{m_2t_1-m_1t_2}$", correct: true },
+      { text: "Nếu $t_1=t_2=t$ thì nhiệt lượng mà nước đá nhận từ môi trường trong mỗi giai đoạn là $\\frac{Pm_2t}{m_2-m_1}$", correct: false }
+    ],
+    explanation: "Giai đoạn 1 chưa cấp điện. GĐ2 nhận thêm nhiệt môi trường nên Q > Pt2. Phương trình thiết lập cho ra kết quả c đúng."
+  },
+
+  // --- PHẦN 3: TRẢ LỜI NGẮN (6 CÂU) ---
+  {
+    id: "p3_1", part: 3,
+    question: "Một mẫu nước đá đang tan có nhiệt độ $0^{\\circ}C$. Nếu nhiệt độ mẫu nước đá này tăng thêm $20^{\\circ}C$ thì độ tăng nhiệt độ tương ứng trong thang Fahrenheit là bao nhiêu $^\\circ F$?",
+    correctAnswer: "36",
+    explanation: "Mỗi $1^{\\circ}C$ tương ứng $1.8^{\\circ}F$. $\\Delta T_F = 20 \\times 1.8 = 36$."
+  },
+  {
+    id: "p3_2", part: 3,
+    question: "Bình chứa 1,5 kg nước ở $20^{\\circ}C$. Thả cục đồng 0,5 kg ở $300^{\\circ}C$. Biết $c_{n}=4200$, $c_d=380$. Nhiệt độ cuối cùng bằng bao nhiêu $^\\circ C$ (làm tròn 1 chữ số thập phân)?",
+    correctAnswer: "28.2",
+    explanation: "Phương trình cân bằng nhiệt: $1.5 \\times 4200 \\times (t-20) = 0.5 \\times 380 \\times (300-t)$. Giải ra $t \\approx 28.2$."
+  },
+  {
+    id: "p3_3", part: 3,
+    question: "Đun sôi 1,5 lít nước từ $20^{\\circ}C$ trong 19 phút. $H=90\\%$. Công suất ấm điện xấp xỉ bao nhiêu W?",
+    correctAnswer: "491",
+    explanation: "Nhiệt lượng cần: $Q = 1.5 \\times 4200 \\times 80 = 504000 J$. Nhiệt do ấm tỏa: $Q_{tp} = Q / 0.9 = 560000 J$. $P = 560000 / 1140s = 491 W$."
+  },
+  {
+    id: "p3_4", part: 3,
+    question: "Cho m(g) nước đá ở $-20^{\\circ}C$ vào 50 g nước ở $40^{\\circ}C$. Khi cân bằng 20 g đá chưa tan. Biết $c_{đá}=2.1$, $\\lambda=336$, $c_n=4.2$. Giá trị m bằng bao nhiêu?",
+    correctAnswer: "42",
+    explanation: "Nhiệt lượng tỏa: $Q_{toa} = 50 \\times 4.2 \\times 40 = 8400J$. Nhiệt lượng thu: $Q_{thu} = m \\times 2.1 \\times 20 + (m-20) \\times 336$. Giải pt $Q_{thu}=Q_{toa} \\Rightarrow m=42g$."
+  },
+  {
+    id: "p3_5", part: 3,
+    question: "Bình A ($80^{\\circ}C$), Bình B ($20^{\\circ}C$). Đổ một nửa nước ở bình B sang A. Cân bằng đổ lại A sang B cho lượng nước như cũ. Nhiệt độ cân bằng bình B bằng bao nhiêu $^\\circ C$?",
+    correctAnswer: "40",
+    explanation: "Khối lượng $m$. Lần 1 (A có $m$ ở $80$, nhận $m/2$ ở $20$): $t_1 = (m\\times80 + 0.5m\\times20)/1.5m = 60^{\\circ}C$. Lần 2 (B có $0.5m$ ở $20$, nhận $0.5m$ ở $60$): $t_2 = (0.5m\\times20 + 0.5m\\times60)/m = 40^{\\circ}C$."
+  },
+  {
+    id: "p3_6", part: 3,
+    question: "Ba cốc chứa nước ở $10^{\\circ}C$, $30^{\\circ}C$, $45^{\\circ}C$. <div class='image-placeholder'>[Chèn Hình 3 Cốc Nước]</div> Nếu rót nửa lượng nước cốc 1 và nửa cốc 2 vào cốc 3, nhiệt độ cân bằng là bao nhiêu?",
     correctAnswer: "24",
-    explanation:
-      "Sử dụng phương trình cân bằng nhiệt và khối lượng nước rút ra từ các dữ kiện nhiệt độ 15 độ C và 35 độ C ở câu hỏi. Kết quả là 24 độ C.",
-  },
+    explanation: "Từ giả thiết rút ra tỉ lệ khối lượng: $m_1 = m_2/3$, $m_3 = m_2/2$. Pha cốc 1,2,3 theo tỉ lệ khối lượng thu được $t_{cb} = 24^{\\circ}C$."
+  }
 ];

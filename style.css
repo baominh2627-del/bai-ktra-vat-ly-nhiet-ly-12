@@ -1,260 +1,316 @@
 :root {
-  --paper-off: #fbfcfe;
-  --ink: #1b3a6b;
-  --green: #28a745;
-  --red: #dc3545;
-  --amber: #ffc107;
-  --blue: #007bff;
-  --font-main: "Times New Roman", Times, serif;
-  --font-mono: "Courier New", Courier, monospace;
+  --bg-color: #f8fafc;
+  --grid-color: #e2e8f0;
+  --ink: #1e293b;
+  --navy: #1e3a8a;
+  --blue-text: #2563eb;
+  --gray-text: #64748b;
+  --border-color: #e2e8f0;
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: "Times New Roman", Times, serif;
 }
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
+
 body {
-  background-color: var(--paper-off);
-  font-family: var(--font-main);
+  background-color: var(--bg-color);
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 25px 25px;
+  font-family: var(--font-sans);
   color: var(--ink);
   line-height: 1.6;
 }
-.mono-font {
-  font-family: var(--font-mono);
-  font-weight: bold;
-}
+
 .hidden {
   display: none !important;
 }
 .container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-/* Bố cục bài thi chia 2 cột */
-.exam-layout {
-  display: flex;
-  max-width: 1200px;
-  margin: 20px auto;
+  max-width: 900px;
+  margin: 40px auto;
   padding: 0 20px;
-  gap: 20px;
-}
-.main-content {
-  flex: 1;
-}
-.sidebar {
-  width: 300px;
-  position: sticky;
-  top: 70px;
-  align-self: flex-start;
 }
 
-/* Cards & Forms */
+/* Thẻ chung */
 .card {
   background: #fff;
   border-radius: 8px;
-  padding: 25px;
-  margin-bottom: 25px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(27, 58, 107, 0.1);
+  padding: 30px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
 }
 .login-card,
 .result-card {
-  margin-top: 50px;
   text-align: center;
+  max-width: 500px;
+  margin: 80px auto;
 }
-.form-group {
-  margin-bottom: 20px;
-  text-align: left;
-}
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-}
-input[type="text"],
-input[type="number"] {
+.form-group input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 16px;
-}
-.btn-primary {
-  background-color: var(--ink);
-  color: #fff;
-  border: none;
-  padding: 12px 30px;
-  font-size: 18px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.btn-primary:hover {
-  opacity: 0.9;
-}
-
-/* Header Timer */
-.sticky-timerbar {
-  position: sticky;
-  top: 0;
-  background-color: var(--ink);
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  padding: 15px 30px;
-  font-size: 18px;
-  z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Cảnh báo 30s cuối */
-@keyframes flash-danger {
-  0% {
-    background-color: var(--red);
-  }
-  50% {
-    background-color: #fff;
-    color: var(--red);
-  }
-  100% {
-    background-color: var(--red);
-  }
-}
-.timer-danger {
-  animation: flash-danger 0.5s infinite;
-}
-
-/* Câu hỏi & Chức năng Flag */
-.question-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
   margin-bottom: 15px;
 }
-.question-title {
-  font-weight: bold;
-  font-size: 18px;
-}
-.btn-flag {
-  background: #f0f0f0;
-  border: 1px solid #ccc;
-  padding: 5px 10px;
+.btn-primary {
+  background-color: var(--navy);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 6px;
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 14px;
+  font-weight: bold;
 }
-.btn-flag.active {
-  background: var(--amber);
-  color: #000;
-  border-color: #d39e00;
+.submit-container {
+  text-align: center;
+  margin: 40px 0 80px 0;
 }
 
-.options-list {
-  list-style: none;
+/* Giao diện Header Bài thi (Mô phỏng ảnh) */
+.exam-header-block {
+  margin-bottom: 30px;
 }
-.option-item {
+.exam-header-top {
+  background: #fff;
+  padding: 25px 30px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px 12px 0 0;
+  border-bottom: none;
+}
+.meta-text {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--gray-text);
+  letter-spacing: 2px;
+  text-transform: uppercase;
   margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 4px;
 }
-.option-item:hover {
-  background: rgba(27, 58, 107, 0.05);
+.exam-title {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  color: var(--navy);
+  margin-bottom: 10px;
 }
-.tf-row {
+.meta-sub {
+  font-size: 14px;
+  color: var(--gray-text);
+}
+.dashed-line {
+  border: none;
+  border-top: 1px dashed #cbd5e1;
+  margin-top: 20px;
+  position: relative;
+}
+.dashed-line::after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  width: 8px;
+  height: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* Thanh trạng thái xanh Navy */
+.exam-info-bar {
+  background-color: var(--navy);
+  color: #94a3b8;
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
-}
-
-/* Bảng Trạng Thái Câu Hỏi */
-.board-card {
-  background: #fff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-.board-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0 15px;
+  align-items: center;
+  padding: 12px 30px;
+  border-radius: 0 0 12px 12px;
   font-size: 14px;
 }
-.legend-item {
+.exam-info-bar.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+.timer-pill {
+  background-color: #334155;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 16px;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
 }
-.box {
-  width: 15px;
-  height: 15px;
-  border: 1px solid #ccc;
-  display: inline-block;
+.green-dot {
+  color: #4ade80;
+  font-size: 12px;
 }
-.box-none {
-  background: #fff;
+.timer-danger {
+  background-color: #ef4444 !important;
+  animation: pulse 1s infinite;
 }
-.box-done {
-  background: var(--blue);
-  border-color: var(--blue);
-}
-.box-flag {
-  background: var(--amber);
-  border-color: var(--amber);
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
-.question-board {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+/* Tiêu đề từng phần */
+.section-header {
+  margin: 40px 0 20px 0;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
   gap: 10px;
 }
-.q-box {
-  width: 40px;
-  height: 40px;
+.badge {
+  font-family: var(--font-sans);
+  background-color: #e0e7ff;
+  color: var(--blue-text);
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: bold;
+}
+.section-subtitle {
+  font-size: 14px;
+  color: var(--gray-text);
+  margin-top: 5px;
+}
+
+/* Câu hỏi */
+.question-card {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px 25px;
+  margin-bottom: 15px;
+}
+.q-layout {
+  display: flex;
+  gap: 15px;
+}
+.q-num {
+  background: var(--navy);
+  color: #fff;
+  width: 28px;
+  height: 28px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
+  border-radius: 6px;
   font-weight: bold;
+  font-size: 14px;
+  flex-shrink: 0;
 }
-.q-box.done {
-  background-color: var(--blue);
-  color: #fff;
-  border-color: var(--blue);
+.q-content {
+  flex: 1;
 }
-.q-box.flagged {
-  background-color: var(--amber);
-  color: #000;
-  border-color: var(--amber);
+.q-text {
+  font-size: 16px;
+  margin-bottom: 15px;
+  margin-top: 2px;
+}
+
+/* Các đáp án (Trắc nghiệm) */
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.option-label {
+  display: block;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.option-label:hover {
+  border-color: #93c5fd;
+  background: #f8fafc;
+}
+.option-label input {
+  display: none;
+} /* Ẩn radio mặc định */
+.option-label.selected {
+  border-color: var(--blue-text);
+  background: #eff6ff;
+}
+.opt-letter {
+  color: var(--blue-text);
+  font-weight: bold;
+  margin-right: 10px;
+  font-family: var(--font-serif);
+}
+
+/* Đúng Sai & Trả lời ngắn */
+.tf-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.tf-controls {
+  display: flex;
+  gap: 15px;
+}
+.tf-controls label {
+  cursor: pointer;
+}
+.short-ans-input {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
 }
 
 /* Chấm điểm */
 .correct-ans {
-  background-color: rgba(40, 167, 69, 0.15) !important;
-  border: 1px solid var(--green) !important;
-  color: var(--green);
+  background-color: #dcfce7 !important;
+  border-color: #22c55e !important;
 }
 .wrong-ans {
-  background-color: rgba(220, 53, 69, 0.15) !important;
-  border: 1px solid var(--red) !important;
-  color: var(--red);
+  background-color: #fee2e2 !important;
+  border-color: #ef4444 !important;
 }
 .explanation {
   margin-top: 15px;
-  padding: 10px;
-  background-color: #f8f9fa;
-  border-left: 4px solid var(--ink);
-  font-style: italic;
+  padding: 15px;
+  background: #f8fafc;
+  border-left: 3px solid var(--navy);
+  font-size: 14px;
 }
 .image-placeholder {
-  background: #e9ecef;
-  border: 2px dashed #6c757d;
-  padding: 20px;
+  background: #f1f5f9;
+  border: 2px dashed #cbd5e1;
+  padding: 30px;
   text-align: center;
-  margin: 10px 0;
-  color: #495057;
+  color: #64748b;
+  margin: 15px 0;
+  border-radius: 8px;
 }
