@@ -1,4 +1,5 @@
 import { examData } from "./data.js";
+import { db, collection, addDoc, serverTimestamp } from "./firebase-config.js";
 
 const loginScreen = document.getElementById("login-screen");
 const examScreen = document.getElementById("exam-screen");
@@ -8,30 +9,56 @@ const questionBoard = document.getElementById("question-board");
 const submitBtn = document.getElementById("submit-btn");
 
 // Biến trạng thái
-let timeRemaining = 3000; // Mặc định 50 phút = 3000 giây
+let timeRemaining = 3000;
 let timerInterval;
 let userAnswers = {};
 let flaggedQuestions = {};
 let isFinished = false;
 let cheatCount = 0;
+let studentName = "";
+let studentClass = "";
 
-// 1. KIỂM TRA BẢN NHÁP & BẮT ĐẦU
+// KHÔI PHỤC BẢN NHÁP NGAY KHI TẢI TRANG
+window.addEventListener("DOMContentLoaded", () => {
+  const draft = JSON.parse(localStorage.getItem("examDraft"));
+
+  if (draft && !draft.isFinished) {
+    loadDraftAndContinue(draft);
+  }
+});
+
+function loadDraftAndContinue(draft) {
+  studentName = draft.studentName || "";
+  studentClass = draft.studentClass || "";
+  timeRemaining = draft.timeRemaining;
+  userAnswers = draft.userAnswers || {};
+  flaggedQuestions = draft.flaggedQuestions || {};
+  cheatCount = draft.cheatCount || 0;
+
+  document.getElementById("display-name").innerText = studentName;
+  document.getElementById("display-class").innerText = studentClass;
+
+  loginScreen.classList.add("hidden");
+  examScreen.classList.remove("hidden");
+
+  renderExam();
+  restoreDOMState();
+  renderBoard();
+  startTimer();
+  setupAntiCheat();
+}
+
+// FORM ĐĂNG NHẬP
 document.getElementById("login-form").addEventListener("submit", (e) => {
   e.preventDefault();
 
-  document.getElementById("display-name").innerText =
-    document.getElementById("student-name").value;
-  document.getElementById("display-class").innerText =
-    document.getElementById("student-class").value;
+  studentName = document.getElementById("student-name").value;
+  studentClass = document.getElementById("student-class").value;
+  const examTime = parseInt(document.getElementById("exam-time").value) || 50;
+  timeRemaining = examTime * 60;
 
-  // Khôi phục dữ liệu bài làm dang dở nếu có
-  const draft = JSON.parse(localStorage.getItem("examDraft"));
-  if (draft && !draft.isFinished) {
-    timeRemaining = draft.timeRemaining;
-    userAnswers = draft.userAnswers || {};
-    flaggedQuestions = draft.flaggedQuestions || {};
-    cheatCount = draft.cheatCount || 0;
-  }
+  document.getElementById("display-name").innerText = studentName;
+  document.getElementById("display-class").innerText = studentClass;
 
   loginScreen.classList.add("hidden");
   examScreen.classList.remove("hidden");
@@ -43,7 +70,7 @@ document.getElementById("login-form").addEventListener("submit", (e) => {
   setupAntiCheat();
 });
 
-// 2. RENDER CÂU HỎI & CHỨC NĂNG ĐÁNH DẤU
+// 2. RENDER CÂU HỎI VỚI LAYOUT NÚT ĐÁP DẤU HỢP LÝ
 function renderExam() {
   questionsContainer.innerHTML = "";
   let currentPart = 0;
@@ -68,7 +95,6 @@ function renderExam() {
   };
 
   examData.forEach((q, index) => {
-    // In Header nếu chuyển phần mới
     if (q.part !== currentPart) {
       currentPart = q.part;
       const header = document.createElement("div");
@@ -87,11 +113,13 @@ function renderExam() {
 
     let contentHTML = `
       <div class="q-layout">
-        <div class="q-header" style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-          <div class="q-num">Câu ${qCounter}</div>
-          <button class="btn-flag ${flaggedQuestions[q.id] ? "active" : ""}" data-id="${q.id}">
-            ${flaggedQuestions[q.id] ? "Bỏ đánh dấu" : "Đánh dấu"}
-          </button>
+        <div class="q-header">
+          <div class="q-num-flag">
+            <div class="q-num">Câu ${qCounter}</div>
+            <button class="btn-flag ${flaggedQuestions[q.id] ? "active" : ""}" data-id="${q.id}" title="Đánh dấu câu này">
+              ${flaggedQuestions[q.id] ? "★" : "☆"}
+            </button>
+          </div>
         </div>
         <div class="q-content">
           <div class="q-text">${q.question}</div>
@@ -134,10 +162,13 @@ function renderExam() {
   // Sự kiện Đánh dấu (Flag)
   document.querySelectorAll(".btn-flag").forEach((btn) => {
     btn.addEventListener("click", (e) => {
-      const qid = e.target.getAttribute("data-id");
+      e.preventDefault();
+      const qid = e.target.closest(".btn-flag").getAttribute("data-id");
       flaggedQuestions[qid] = !flaggedQuestions[qid];
-      e.target.classList.toggle("active");
-      e.target.innerText = flaggedQuestions[qid] ? "Bỏ đánh dấu" : "Đánh dấu";
+      e.target.closest(".btn-flag").classList.toggle("active");
+      e.target.closest(".btn-flag").innerText = flaggedQuestions[qid]
+        ? "★"
+        : "☆";
       updateBoard();
       saveDraft();
     });
@@ -173,16 +204,25 @@ function renderExam() {
   if (window.MathJax) MathJax.typesetPromise();
 }
 
-// 3. TẠO & CẬP NHẬT BẢNG ĐIỀU HƯỚNG
+// 3. BẢNG ĐIỀU HƯỚNG STICKY VỚI LAYOUT NHỎ
 function renderBoard() {
   if (!questionBoard) return;
   questionBoard.innerHTML = "";
+
+  let boardHTML = `<div class="board-legend">
+    <span class="box"></span><span class="box-label">Chưa làm</span>
+    <span class="box done"></span><span class="box-label">Đã làm</span>
+    <span class="box flagged"></span><span class="box-label">Đánh dấu</span>
+  </div>`;
+
   examData.forEach((q, index) => {
-    const box = document.createElement("div");
+    const box = document.createElement("button");
     box.className = "q-box";
     box.id = `box-${q.id}`;
     box.innerText = index + 1;
-    box.addEventListener("click", () => {
+    box.type = "button";
+    box.addEventListener("click", (e) => {
+      e.preventDefault();
       document
         .getElementById(`q-card-${q.id}`)
         .scrollIntoView({ behavior: "smooth", block: "center" });
@@ -210,9 +250,11 @@ function updateBoard() {
 
     if (questionBoard) {
       const box = document.getElementById(`box-${q.id}`);
-      box.className = "q-box"; // Reset class
-      if (flaggedQuestions[q.id]) box.classList.add("flagged");
-      else if (answered) box.classList.add("done");
+      if (box) {
+        box.className = "q-box";
+        if (flaggedQuestions[q.id]) box.classList.add("flagged");
+        else if (answered) box.classList.add("done");
+      }
     }
   });
 
@@ -220,16 +262,19 @@ function updateBoard() {
   if (countEl) countEl.innerText = `${answeredCount}/${examData.length}`;
 }
 
-// 4. LƯU & KHÔI PHỤC TIẾN ĐỘ
+// 4. LƯU BẢN NHÁP
 function saveDraft() {
   localStorage.setItem(
     "examDraft",
     JSON.stringify({
+      studentName,
+      studentClass,
       timeRemaining,
       userAnswers,
       flaggedQuestions,
       cheatCount,
       isFinished,
+      lastSaved: new Date().toISOString(),
     }),
   );
 }
@@ -267,7 +312,7 @@ function startTimer() {
     document.getElementById("countdown").innerText = `${m}:${s}`;
 
     if (timeRemaining === 30) {
-      alert("Cảnh báo: Chỉ còn 30 giây!");
+      alert("⚠️ Cảnh báo: Chỉ còn 30 giây!");
       document.querySelector(".timer-pill").classList.add("timer-danger");
     }
 
@@ -278,13 +323,53 @@ function startTimer() {
   }, 1000);
 }
 
+// 6. CHỐNG GIAN LẬN + LƯU FIREBASE KHI THOÁT
 function setupAntiCheat() {
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden && !isFinished) cheatCount++;
+    if (document.hidden && !isFinished) {
+      cheatCount++;
+      saveDraft();
+    }
+  });
+
+  // Cảnh báo khi thoát trang
+  window.addEventListener("beforeunload", (e) => {
+    if (!isFinished) {
+      e.preventDefault();
+      e.returnValue = "Bạn chưa nộp bài! Tiến trình sẽ bị mất.";
+      saveToFirebase("warning", "Thoát trang trong khi làm bài");
+    }
+  });
+
+  // Lưu log khi thoát trang (fallback)
+  window.addEventListener("unload", () => {
+    if (!isFinished) {
+      saveToFirebase("exit", "Học sinh thoát khỏi trang trước khi nộp");
+    }
   });
 }
 
-// 6. NỘP BÀI VÀ CHẤM ĐIỂM
+async function saveToFirebase(eventType, description) {
+  try {
+    const draft = JSON.parse(localStorage.getItem("examDraft"));
+    if (draft) {
+      await addDoc(collection(db, "exam_logs"), {
+        studentName: draft.studentName,
+        studentClass: draft.studentClass,
+        eventType: eventType,
+        description: description,
+        timeRemaining: draft.timeRemaining,
+        answeredCount: Object.keys(draft.userAnswers).length,
+        cheatCount: draft.cheatCount,
+        timestamp: serverTimestamp(),
+      });
+    }
+  } catch (error) {
+    console.error("Lỗi lưu vào Firebase:", error);
+  }
+}
+
+// 7. NỘP BÀI VÀ CHẤM ĐIỂM
 submitBtn.addEventListener("click", () => {
   if (confirm("Bạn có chắc muốn nộp bài?")) submitExam();
 });
@@ -292,7 +377,6 @@ submitBtn.addEventListener("click", () => {
 function submitExam() {
   isFinished = true;
   clearInterval(timerInterval);
-  localStorage.removeItem("examDraft");
 
   document
     .querySelectorAll("input, .btn-flag")
@@ -348,11 +432,32 @@ function submitExam() {
     }
   });
 
+  // Lưu kết quả vào Firebase
+  saveExamResultToFirebase(totalScore);
+
   document.getElementById("final-score").innerText = totalScore.toFixed(2);
   document.getElementById("cheat-display").innerText = cheatCount;
 
   examScreen.classList.add("hidden");
   resultScreen.classList.remove("hidden");
+
+  // Xóa bản nháp sau khi nộp thành công
+  localStorage.removeItem("examDraft");
+}
+
+async function saveExamResultToFirebase(score) {
+  try {
+    await addDoc(collection(db, "exam_results"), {
+      studentName: studentName,
+      studentClass: studentClass,
+      score: score,
+      totalQuestions: examData.length,
+      cheatCount: cheatCount,
+      timestamp: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error("Lỗi lưu kết quả:", error);
+  }
 }
 
 document.getElementById("review-btn").addEventListener("click", () => {

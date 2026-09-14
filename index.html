@@ -24,9 +24,8 @@
     ></script>
   </head>
   <body>
-    <!-- Màn hình Đăng nhập (Thông tin học sinh) -->
+    <!-- Màn hình Đăng nhập -->
     <div id="login-screen" class="container">
-      <!-- Khung Header Bài Thi -->
       <div class="exam-header-block" style="margin-bottom: 20px">
         <div
           class="exam-header-top"
@@ -45,7 +44,6 @@
         </div>
       </div>
 
-      <!-- Khung Nhập thông tin -->
       <div class="card form-card">
         <form id="login-form">
           <div class="form-group">
@@ -66,7 +64,6 @@
           <div class="form-group">
             <label for="exam-time">Thời gian làm bài (phút)</label>
             <input type="number" id="exam-time" value="50" />
-            <!-- required -->
           </div>
 
           <button type="submit" class="btn-primary" style="margin-top: 10px">
@@ -80,7 +77,6 @@
         </form>
       </div>
 
-      <!-- Footer trang -->
       <div class="page-footer">
         Đề Vật Lý 12 · tự động chấm điểm theo đúng barem & lưu kết quả
       </div>
@@ -88,16 +84,13 @@
 
     <!-- Màn hình Làm bài thi -->
     <div id="exam-screen" class="hidden container">
-      <!-- Phần thêm -->
+      <!-- Bảng điều hướng sticky (góc phải dưới) -->
       <div id="board-container" class="board-card">
         <h3>Bảng Điều Hướng</h3>
-        <div class="legend">
-          <span class="box"></span> Chưa làm <span class="box done"></span> Đã
-          làm <span class="box flagged"></span> Đánh dấu
-        </div>
         <div id="question-board" class="q-grid"></div>
       </div>
-      <!-- Khung Header Bài Thi (Giống ảnh) -->
+
+      <!-- Header Bài Thi -->
       <div class="exam-header-block">
         <div class="exam-header-top">
           <div class="meta-text">KIỂM TRA 50 PHÚT · MÔN VẬT LÝ 12</div>
@@ -122,7 +115,7 @@
         </div>
       </div>
 
-      <!-- Vùng chứa câu hỏi -->
+      <!-- Container câu hỏi -->
       <div id="questions-container">
         <!-- Render bằng JS -->
       </div>
