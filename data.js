@@ -389,6 +389,7 @@ export const examData = [
   {
     id: "p3_6",
     part: 3,
+    question: "",
     image: "img/anh-cau6-phan3.png",
     correctAnswer: "22.5",
     explanation:

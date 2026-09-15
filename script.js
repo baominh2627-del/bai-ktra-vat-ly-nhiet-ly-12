@@ -125,6 +125,7 @@ function renderExam() {
         </div>
         <div class="q-content">
           <div class="q-text">${q.question}</div>
+          ${q.image ? `<div class="q-image"><img src="${q.image}" alt="Hình minh họa câu ${qCounter}"></div>` : ""}
     `;
 
     if (q.part === 1) {
