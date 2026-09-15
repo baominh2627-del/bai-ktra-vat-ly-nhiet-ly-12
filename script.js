@@ -328,28 +328,36 @@ function startTimer() {
 
 // 6. CHỐNG GIAN LẬN + LƯU FIREBASE KHI THOÁT
 function setupAntiCheat() {
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden && !isFinished) {
-      cheatCount++;
-      saveDraft();
-    }
-  });
-
-  // Cảnh báo khi thoát trang
+  // Cảnh báo khi thoát trang (chỉ đếm LẬN THOÁT TRANG THỰC TỀ)
   window.addEventListener("beforeunload", (e) => {
     if (!isFinished) {
+      cheatCount++; // Đếm lần thoát trang
       e.preventDefault();
       e.returnValue = "Bạn chưa nộp bài! Tiến trình sẽ bị mất.";
-      saveToFirebase("warning", "Thoát trang trong khi làm bài");
+      saveToFirebase(
+        "warning",
+        "Thoát trang trong khi làm bài (lần " + cheatCount + ")",
+      );
     }
   });
 
   // Lưu log khi thoát trang (fallback)
   window.addEventListener("unload", () => {
     if (!isFinished) {
-      saveToFirebase("exit", "Học sinh thoát khỏi trang trước khi nộp");
+      saveToFirebase(
+        "exit",
+        "Học sinh thoát khỏi trang trước khi nộp (tổng " + cheatCount + " lần)",
+      );
     }
   });
+
+  // GỢI Ý: Bỏ sự kiện visibilitychange vì nó tính cả:
+  // - Mở DevTools (F12)
+  // - Nhận thông báo
+  // - Lock màn hình
+  // - Alt+Tab, Win+D
+  // - Bóng trình duyệt
+  // ⚠️ Những sự kiện này KHÔNG phải gian lận thực tế
 }
 
 async function saveToFirebase(eventType, description) {

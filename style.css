@@ -397,12 +397,6 @@ body {
   line-height: 1.6;
 }
 
-/* ĐÁP ÁN TRẮC NGHIỆM */
-.options-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
 .q-image {
   margin: 15px 0;
   display: flex;
@@ -415,6 +409,13 @@ body {
   border: 1px solid var(--border-color);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ĐÁP ÁN TRẮC NGHIỆM */
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .option-label {
