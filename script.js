@@ -54,6 +54,13 @@ function loadDraftAndContinue(draft) {
 document.getElementById("login-form").addEventListener("submit", (e) => {
   e.preventDefault();
 
+  // Reset sạch trạng thái trước khi bắt đầu bài thi mới
+  userAnswers = {};
+  flaggedQuestions = {};
+  cheatCount = 0;
+  isFinished = false;
+  localStorage.removeItem("examDraft");
+
   studentName = document.getElementById("student-name").value;
   studentClass = document.getElementById("student-class").value;
   const examTime = parseInt(document.getElementById("exam-time").value) || 50;
@@ -328,36 +335,25 @@ function startTimer() {
 
 // 6. CHỐNG GIAN LẬN + LƯU FIREBASE KHI THOÁT
 function setupAntiCheat() {
-  // Cảnh báo khi thoát trang (chỉ đếm LẬN THOÁT TRANG THỰC TỀ)
   window.addEventListener("beforeunload", (e) => {
     if (!isFinished) {
-      cheatCount++; // Đếm lần thoát trang
       e.preventDefault();
       e.returnValue = "Bạn chưa nộp bài! Tiến trình sẽ bị mất.";
-      saveToFirebase(
-        "warning",
-        "Thoát trang trong khi làm bài (lần " + cheatCount + ")",
-      );
+      // Không tăng cheatCount ở đây vì việc thoát CHƯA CHẮC xảy ra
+      // (người dùng có thể bấm "Ở lại trang" ở hộp thoại xác nhận)
     }
   });
 
-  // Lưu log khi thoát trang (fallback)
   window.addEventListener("unload", () => {
     if (!isFinished) {
+      cheatCount++; // Chỉ tăng khi trang ĐÃ THỰC SỰ bị đóng
+      saveDraft();
       saveToFirebase(
         "exit",
         "Học sinh thoát khỏi trang trước khi nộp (tổng " + cheatCount + " lần)",
       );
     }
   });
-
-  // GỢI Ý: Bỏ sự kiện visibilitychange vì nó tính cả:
-  // - Mở DevTools (F12)
-  // - Nhận thông báo
-  // - Lock màn hình
-  // - Alt+Tab, Win+D
-  // - Bóng trình duyệt
-  // ⚠️ Những sự kiện này KHÔNG phải gian lận thực tế
 }
 
 async function saveToFirebase(eventType, description) {
