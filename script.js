@@ -335,18 +335,20 @@ function startTimer() {
 
 // 6. CHỐNG GIAN LẬN + LƯU FIREBASE KHI THOÁT
 function setupAntiCheat() {
+  // Chỉ hiển thị cảnh báo, KHÔNG đếm ở đây
+  // vì lúc này người dùng CHƯA CHẮC đã thoát (có thể bấm "Ở lại trang")
   window.addEventListener("beforeunload", (e) => {
     if (!isFinished) {
       e.preventDefault();
       e.returnValue = "Bạn chưa nộp bài! Tiến trình sẽ bị mất.";
-      // Không tăng cheatCount ở đây vì việc thoát CHƯA CHẮC xảy ra
-      // (người dùng có thể bấm "Ở lại trang" ở hộp thoại xác nhận)
     }
   });
 
-  window.addEventListener("unload", () => {
+  // Đếm ở đây: pagehide kích hoạt ĐÁNG TIN CẬY khi trang
+  // thực sự bị rời đi (đóng tab, refresh, điều hướng đi nơi khác)
+  window.addEventListener("pagehide", () => {
     if (!isFinished) {
-      cheatCount++; // Chỉ tăng khi trang ĐÃ THỰC SỰ bị đóng
+      cheatCount++;
       saveDraft();
       saveToFirebase(
         "exit",
