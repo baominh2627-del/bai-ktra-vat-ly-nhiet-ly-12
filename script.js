@@ -335,24 +335,35 @@ function startTimer() {
 
 // 6. CHỐNG GIAN LẬN + LƯU FIREBASE KHI THOÁT
 function setupAntiCheat() {
-  // Chỉ hiển thị cảnh báo, KHÔNG đếm ở đây
-  // vì lúc này người dùng CHƯA CHẮC đã thoát (có thể bấm "Ở lại trang")
+  // Cảnh báo khi cố thoát trang (đóng tab/refresh/điều hướng)
   window.addEventListener("beforeunload", (e) => {
     if (!isFinished) {
       e.preventDefault();
       e.returnValue = "Bạn chưa nộp bài! Tiến trình sẽ bị mất.";
+      // Không tăng cheatCount ở đây — người dùng có thể bấm "Ở lại trang"
     }
   });
 
-  // Đếm ở đây: pagehide kích hoạt ĐÁNG TIN CẬY khi trang
-  // thực sự bị rời đi (đóng tab, refresh, điều hướng đi nơi khác)
+  // Log Firebase khi trang THỰC SỰ bị rời đi (đáng tin cậy hơn unload)
   window.addEventListener("pagehide", () => {
     if (!isFinished) {
-      cheatCount++;
       saveDraft();
       saveToFirebase(
         "exit",
-        "Học sinh thoát khỏi trang trước khi nộp (tổng " + cheatCount + " lần)",
+        "Học sinh rời trang trước khi nộp (tổng " + cheatCount + " lần)",
+      );
+    }
+  });
+
+  // ĐẾM SỐ LẦN "THOÁT": dùng visibilitychange — kích hoạt ngay khi
+  // chuyển tab / thu nhỏ / khóa máy, không phụ thuộc trang có đóng hay không
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && !isFinished) {
+      cheatCount++;
+      saveDraft();
+      saveToFirebase(
+        "warning",
+        "Học sinh chuyển khỏi màn hình bài thi (lần " + cheatCount + ")",
       );
     }
   });
