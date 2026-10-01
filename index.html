@@ -129,7 +129,6 @@
       </div>
     </div>
 
-    <!-- Màn hình Kết quả -->
     <div id="result-screen" class="hidden container">
       <div class="card result-card">
         <h2 style="font-family: var(--font-serif)">Kết Quả Bài Thi</h2>
@@ -137,6 +136,8 @@
           Điểm: <span id="final-score"></span>/10
         </div>
         <p>Số lần rời khỏi màn hình: <span id="cheat-display">0</span></p>
+        <!-- Trạng thái lưu Firebase -->
+        <p id="firebase-status" style="font-size: 14px; margin-top: 8px; color: #666;">⏳ Đang kết nối hệ thống lưu...</p>
         <button id="review-btn" class="btn-primary">Xem lại bài làm</button>
       </div>
     </div>

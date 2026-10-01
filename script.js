@@ -501,7 +501,12 @@ async function saveExamResultToFirebase(
   tongDiem,
   soLanThoat,
 ) {
+  // Hiển thị trạng thái đang lưu
+  const statusEl = document.getElementById("firebase-status");
+  if (statusEl) statusEl.innerText = "⏳ Đang lưu kết quả lên hệ thống...";
+
   try {
+    console.log("🔥 Bắt đầu lưu Firebase...", { studentName, studentClass, tongDiem });
     const ketQuaRef = ref(db, `ketQua/${MA_DE}`);
     const newEntryRef = push(ketQuaRef);
     await set(newEntryRef, {
@@ -516,8 +521,17 @@ async function saveExamResultToFirebase(
       thoiGianNop: new Date().toISOString(),
       serverTimestamp: serverTimestamp(),
     });
+    console.log("✅ Lưu Firebase thành công!");
+    if (statusEl) {
+      statusEl.style.color = "green";
+      statusEl.innerText = "✅ Kết quả đã được lưu thành công!";
+    }
   } catch (error) {
-    console.error("Lỗi lưu kết quả:", error);
+    console.error("❌ Lỗi lưu kết quả:", error);
+    if (statusEl) {
+      statusEl.style.color = "red";
+      statusEl.innerText = "❌ Lỗi lưu kết quả: " + error.message;
+    }
   }
 }
 
