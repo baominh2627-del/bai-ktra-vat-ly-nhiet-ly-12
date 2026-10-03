@@ -1,5 +1,6 @@
 import { examData } from "./data.js";
 import { db, ref, push, set, serverTimestamp } from "./firebase-config.js";
+import { getMTSeduSession, showLoginRequired } from "./mtsedu-auth.js";
 
 const loginScreen = document.getElementById("login-screen");
 const examScreen = document.getElementById("exam-screen");
@@ -22,16 +23,50 @@ let lastScore = 0;
 
 // KHÔI PHỤC BẢN NHÁP NGAY KHI TẢI TRANG
 window.addEventListener("DOMContentLoaded", () => {
-  const draft = JSON.parse(localStorage.getItem("examDraft"));
+  // Kiểm tra đăng nhập MTSedu
+  const session = getMTSeduSession();
+  if (!session) {
+    const loginCard = loginScreen.querySelector(".form-card") || loginScreen.querySelector(".card");
+    if (loginCard) showLoginRequired(loginCard, "https://mtsedu.vercel.app/#physics");
+    return;
+  }
 
-  if (draft && !draft.isFinished) {
+  // Đã đăng nhập → đọc tên từ session
+  studentName = session.displayName || session.username;
+  studentClass = session.username;
+
+  const draft = JSON.parse(localStorage.getItem("examDraft"));
+  if (draft && !draft.isFinished && draft.studentName === studentName) {
     loadDraftAndContinue(draft);
+  } else {
+    startExamDirectly();
   }
 });
 
+function startExamDirectly() {
+  userAnswers = {};
+  flaggedQuestions = {};
+  cheatCount = 0;
+  isFinished = false;
+  localStorage.removeItem("examDraft");
+  timeRemaining = 50 * 60;
+
+  document.getElementById("display-name").innerText = studentName;
+  document.getElementById("display-class").innerText = studentClass;
+
+  loginScreen.classList.add("hidden");
+  examScreen.classList.remove("hidden");
+
+  renderExam();
+  restoreDOMState();
+  renderBoard();
+  startTimer();
+  setupAntiCheat();
+}
+
 function loadDraftAndContinue(draft) {
-  studentName = draft.studentName || "";
-  studentClass = draft.studentClass || "";
+  studentName = draft.studentName || studentName;
+  studentClass = draft.studentClass || studentClass;
   timeRemaining = draft.timeRemaining;
   userAnswers = draft.userAnswers || {};
   flaggedQuestions = draft.flaggedQuestions || {};
@@ -50,34 +85,7 @@ function loadDraftAndContinue(draft) {
   setupAntiCheat();
 }
 
-// FORM ĐĂNG NHẬP
-document.getElementById("login-form").addEventListener("submit", (e) => {
-  e.preventDefault();
 
-  // Reset sạch trạng thái trước khi bắt đầu bài thi mới
-  userAnswers = {};
-  flaggedQuestions = {};
-  cheatCount = 0;
-  isFinished = false;
-  localStorage.removeItem("examDraft");
-
-  studentName = document.getElementById("student-name").value;
-  studentClass = document.getElementById("student-class").value;
-  const examTime = parseInt(document.getElementById("exam-time").value) || 50;
-  timeRemaining = examTime * 60;
-
-  document.getElementById("display-name").innerText = studentName;
-  document.getElementById("display-class").innerText = studentClass;
-
-  loginScreen.classList.add("hidden");
-  examScreen.classList.remove("hidden");
-
-  renderExam();
-  restoreDOMState();
-  renderBoard();
-  startTimer();
-  setupAntiCheat();
-});
 
 // 2. RENDER CÂU HỎI VỚI LAYOUT NÚT ĐÁP DẤU HỢP LÝ
 function renderExam() {
