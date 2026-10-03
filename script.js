@@ -1,6 +1,6 @@
 import { examData } from "./data.js";
 import { db, ref, push, set, serverTimestamp } from "./firebase-config.js";
-import { getMTSeduSession, showLoginRequired } from "./mtsedu-auth.js";
+import { getMTSeduSession, showLoginRequired, insertBackButton } from "./mtsedu-auth.js";
 
 const loginScreen = document.getElementById("login-screen");
 const examScreen = document.getElementById("exam-screen");
@@ -34,6 +34,9 @@ window.addEventListener("DOMContentLoaded", () => {
   // Đã đăng nhập → đọc tên từ session
   studentName = session.displayName || session.username;
   studentClass = session.username;
+
+  // Thêm nút quay lại trang chủ MTSedu
+  insertBackButton();
 
   const draft = JSON.parse(localStorage.getItem("examDraft"));
   if (draft && !draft.isFinished && draft.studentName === studentName) {
