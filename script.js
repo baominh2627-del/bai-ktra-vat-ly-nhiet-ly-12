@@ -42,7 +42,9 @@ window.addEventListener("DOMContentLoaded", () => {
   if (draft && !draft.isFinished && draft.studentName === studentName) {
     loadDraftAndContinue(draft);
   } else {
-    startExamDirectly();
+    document.getElementById("btn-start-exam").addEventListener("click", () => {
+      startExamDirectly();
+    });
   }
 });
 
