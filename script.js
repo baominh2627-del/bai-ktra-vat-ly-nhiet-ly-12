@@ -425,7 +425,11 @@ function submitExam() {
   const timerPill = document.querySelector(".timer-pill");
   if (timerPill) timerPill.classList.remove("timer-danger");
 
-  let totalScore = 0; let diemPhan1 = 0; let diemPhan2 = 0; let diemPhan3 = 0; let correctness = {};
+  let totalScore = 0;
+  let diemPhan1 = 0;
+  let diemPhan2 = 0;
+  let diemPhan3 = 0;
+  let correctness = {};
 
   examData.forEach((q) => {
     document.getElementById(`exp-${q.id}`).classList.remove("hidden");
@@ -437,13 +441,32 @@ function submitExam() {
         .classList.add("correct-ans");
       if (selected === q.correctAnswer) {
         totalScore += 0.25;
-        diemPhan1 += 0.25; correctness[q.id] = true; } else { correctness[q.id] = false; if (selected !== undefined) { document.getElementById(`lbl-${q.id}-${selected}`).classList.add("wrong-ans"); } }
+        diemPhan1 += 0.25;
+        correctness[q.id] = true;
+      } else {
+        correctness[q.id] = false;
+        if (selected !== undefined) {
+          document
+            .getElementById(`lbl-${q.id}-${selected}`)
+            .classList.add("wrong-ans");
+        }
+      }
     } else if (q.part === 2) {
-      let cCount = 0; correctness[q.id] = {}; q.statements.forEach((stmt, idx) => {
+      let cCount = 0;
+      correctness[q.id] = {};
+      q.statements.forEach((stmt, idx) => {
         const row = document.getElementById(`row-${q.id}-${idx}`);
         const ans = userAnswers[q.id] ? userAnswers[q.id][idx] : null;
         if (ans === stmt.correct.toString()) {
-          cCount++; row.classList.add("correct-ans"); correctness[q.id][idx] = true; } else { correctness[q.id][idx] = false; if (ans !== null) { row.classList.add("wrong-ans"); } }
+          cCount++;
+          row.classList.add("correct-ans");
+          correctness[q.id][idx] = true;
+        } else {
+          correctness[q.id][idx] = false;
+          if (ans !== null) {
+            row.classList.add("wrong-ans");
+          }
+        }
       });
       if (cCount === 4) {
         totalScore += 1.0;
@@ -462,8 +485,12 @@ function submitExam() {
         q.correctAnswer.toLowerCase()
       ) {
         totalScore += 0.25;
-        diemPhan3 += 0.25; input.classList.add("correct-ans"); correctness[q.id] = true; } else { correctness[q.id] = false;
+        diemPhan3 += 0.25;
+        input.classList.add("correct-ans");
+        correctness[q.id] = true;
+      } else {
         input.classList.add("wrong-ans");
+        correctness[q.id] = false;
       }
     }
   });
@@ -477,7 +504,6 @@ function submitExam() {
     document.getElementById("review-score").innerText = totalScore.toFixed(2);
   }
 
-  // Lưu kết quả vào Firebase
   saveExamResultToFirebase(diemPhan1, diemPhan2, diemPhan3, totalScore, cheatCount, correctness);
 
   document.getElementById("final-score").innerText = totalScore.toFixed(2);
@@ -486,10 +512,8 @@ function submitExam() {
   examScreen.classList.add("hidden");
   resultScreen.classList.remove("hidden");
 
-  // Xóa bản nháp sau khi nộp thành công
   localStorage.removeItem("examDraft");
 }
-
 async function saveExamResultToFirebase(diemPhan1, diemPhan2, diemPhan3, tongDiem, soLanThoat, correctness) {
   // Hiển thị trạng thái đang lưu
   const statusEl = document.getElementById("firebase-status");
@@ -546,6 +570,7 @@ document.getElementById("review-btn").addEventListener("click", () => {
   examScreen.classList.remove("hidden");
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
+
 
 
 
